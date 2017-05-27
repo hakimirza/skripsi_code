@@ -41,6 +41,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.downloadinstance.Download;
 import org.odk.collect.android.dto.Instance;
+import org.odk.collect.android.koneksi.AlamatServer;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
@@ -509,7 +510,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     public void getParameter (StringBuilder as ,String[] ids){
         JSONObject js = new JSONObject();
         String [] proj = new String[2];
-        ArrayList<Download> downloads= new ArrayList<Download>();
+        HashMap<String,String> parameter = new HashMap<>();
 
         proj[0]=InstanceColumns.UUID;
         proj[1]=InstanceColumns.JR_FORM_ID;
@@ -524,20 +525,20 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 Log.d("septiawan_cuk","bah");
             }
             if (results.getCount() > 0) {
-                JSONArray array = new JSONArray();
                 results.moveToPosition(-1);
 
                 while (results.moveToNext()) {
-                    HashMap<String,String> parameter = new HashMap<>();
+
                     Log.d("septiawan_upload_","terlewati_ye_3");
                     if(results.getString(results.getColumnIndex(InstanceColumns.UUID))!=null
                             &&!results.getString(results.getColumnIndex(InstanceColumns.UUID)).equals("")){
                         parameter.put("uuid",results.getString(results.getColumnIndex(InstanceColumns.UUID)));
                     }
                     parameter.put("form_id",results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID)));
-                    Log.d("septiawan_uuid_array",array.toString());
+                    Log.d("septiawan_uuid_array",parameter.toString());
+                    parameter.put("id_user","13.7868");
                 }
-                js.put("data",array);
+                js.put("data",parameter);
             }
             else{
                 Log.d("UploadErrorDanIns ", "tidak ada result");
@@ -550,13 +551,19 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                 results.close();
             }
         }
-        Log.d("UploadErrorDanIns ", js.toString());
+        sendData(parameter);
     }
 
     public void sendData(final HashMap<String,String> parameter){
-        StringRequest send = new StringRequest(Request.Method.POST, "", new Response.Listener<String>() {
+        StringRequest send = new StringRequest(Request.Method.POST, AlamatServer.ALAMAT_SERVER+AlamatServer.INSERT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                try{
+                    JSONObject jsonObject = new JSONObject(response);
+                    jsonObject.getString("status");
+                }catch (Exception r){
+                    Log.d("upload_uuid_eror",r.toString());
+                }
 
             }
         }, new Response.ErrorListener() {
@@ -568,11 +575,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param = parameter;
-
                 return param;
             }
         };
-
         Collect.getInstance2().addToRequestQueue(send);
     }
 }

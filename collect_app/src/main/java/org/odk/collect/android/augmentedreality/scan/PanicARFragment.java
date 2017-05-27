@@ -20,6 +20,7 @@ import org.odk.collect.android.augmentedreality.arkit.PARController;
 import org.odk.collect.android.augmentedreality.arkit.PARFragment;
 import org.odk.collect.android.augmentedreality.arkit.PARPoiLabel;
 import org.odk.collect.android.augmentedreality.arkit.PARPoiLabelAdvanced;
+import org.odk.collect.android.augmentedreality.arkit.StikerLabel;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceAttitude;
 import org.odk.collect.android.augmentedreality.sensorkit.enums.PSKDeviceOrientation;
 
@@ -46,30 +47,25 @@ public class PanicARFragment extends PARFragment {
         // example to add costume drawable
         databaseHandler = new DatabaseHandler(getActivity());
         bangunanSensusArrayList = databaseHandler.getAll();
-//        PARPoiLabel label = createPoi("Regensburg", "doPanic Headquarter, Germany", 49.01824, 12.0953);
-//        label.setBackgroundImageResource(R.drawable.custom_poi_label);
-//        label.setSize(384, 192);
-//        PARController.getInstance().addPoi(label);
-//
-////        label = createPoi("Berlin", "Germany", 52.523402, 13.41141, 35.0); // altitude
-////        label.setIconImageViewResource(R.drawable.poi_icon);
-//        label.setOffset(new Point(0, 100));
-//        PARController.getInstance().addPoi(label);
+
         if(bangunanSensusArrayList!= null){
             for(int i=0;i<bangunanSensusArrayList.size();i++){
-                PARController.getInstance().addPoi(createPoi(bangunanSensusArrayList.get(i).getNamaKRT(),bangunanSensusArrayList.get(i).getPathFoto(),
-                        bangunanSensusArrayList.get(i).getLat(),bangunanSensusArrayList.get(i).getLon(),(bangunanSensusArrayList.get(i).getPathFoto())));
+                ArrayList<String> keterangan = new ArrayList<>() ;
+                Location location =  new Location("location");
+                location.setLatitude(bangunanSensusArrayList.get(i).getLat());
+                location.setLongitude(bangunanSensusArrayList.get(i).getLon());
+                keterangan.add(bangunanSensusArrayList.get(i).getNamaKRT());
+                keterangan.add("23");
+                keterangan.add("13");
+                keterangan.add("21");
+                keterangan.add(bangunanSensusArrayList.get(i).getPathFoto());
+                PARController.getInstance().addPoi(create(keterangan,location));
+//                PARController.getInstance().addPoi(createPoi(bangunanSensusArrayList.get(i).getNamaKRT(),bangunanSensusArrayList.get(i).getPathFoto(),
+//                        bangunanSensusArrayList.get(i).getLat(),bangunanSensusArrayList.get(i).getLon(),(bangunanSensusArrayList.get(i).getPathFoto())));
             }
         }else{
             Toast.makeText(getActivity(), "Belum Ada Data", Toast.LENGTH_SHORT).show();
         }
-//        PARController.getInstance().addPoi(createPoi("London", "United Kingdom", 51.507351, -0.127758));
-
-//        initLabelRepo();
-
-        // set fake location
-        //PSKDeviceAttitude.sharedDeviceAttitude().setFakeLocation(49.018269042391786, 12.09614172577858, 360.0);
-        //PSKDeviceAttitude.sharedDeviceAttitude().setUseFakeLocation(false);
     }
 
     @Override
@@ -96,7 +92,7 @@ public class PanicARFragment extends PARFragment {
                 PARController.getInstance().addPoi(labelRepo.get(random));
                 Toast.makeText(this.getActivity(),"Added: " + labelRepo.get(random).getTitle(), Toast.LENGTH_SHORT).show();
                 return super.onOptionsItemSelected(item);
-            case R.id.action_add_cardinal_pois:
+            case  R.id.action_add_cardinal_pois:
                 createCDPOIs();
                 return super.onOptionsItemSelected(item);
             case R.id.action_delete_last_poi:
@@ -139,7 +135,7 @@ public class PanicARFragment extends PARFragment {
         poiLocation.setLatitude(lat);
         poiLocation.setLongitude(lon);
 
-        final PARPoiLabel parPoiLabel = new PARPoiLabel(poiLocation, title, description, R.layout.sticker_label, R.drawable.radar_dot,pathFoto);
+        final PARPoiLabel parPoiLabel = new PARPoiLabel(poiLocation, title, description, R.layout.sticker_label, R.drawable.ic_rumah,pathFoto);
 
         parPoiLabel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +148,20 @@ public class PanicARFragment extends PARFragment {
         });
 
         return parPoiLabel;
+    }
+
+    public StikerLabel create(final ArrayList<String> keterangan, Location location){
+        final StikerLabel stiker = new StikerLabel(location,keterangan,R.layout.stiker_label_2,R.drawable.ic_rumah);
+
+        stiker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),keterangan.get(0),keterangan.get(4));
+                customModalScan.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                customModalScan.show();
+            }
+        });
+        return stiker;
     }
 
     /**
@@ -193,39 +203,7 @@ public class PanicARFragment extends PARFragment {
         return createPoi(title, description, latitude, longitude,altitude);
     }
 
-    // holds a set of example pois, which are gonna created randomly
-//    private void initLabelRepo(){
-//        labelRepo.add(createRepoPoi("Regensburg", "doPanic Headquarter, Germany", 49.01824, 12.0953));
-//        labelRepo.add(createRepoPoi("Munic", "Germany", 48.1351253, 11.581980599999952));
-//        labelRepo.add(createRepoPoi("Nuernberg", "Germany", 49.45203, 11.07675));
-//        labelRepo.add(createRepoPoi("Frankfurt", "Germany", 50.1109221, 8.682126700000026));
-//        labelRepo.add(createRepoPoi("Hamburg", "Germany", 53.551085, 9.993682));
-//        labelRepo.add(createRepoPoi("Berlin", "Capital City, Germany", 52.520007, 13.404954));
-//        labelRepo.add(createRepoPoi("Wien", "Capital City, Austria", 48.208174, 16.373819));
-//        labelRepo.add(createRepoPoi("Graz", "Austria", 47.070714, 15.439504));
-//        labelRepo.add(createRepoPoi("Bern", "Switzerland", 46.947922, 7.444608));
-//        labelRepo.add(createRepoPoi("Zurich", "Switzerland", 47.36865, 8.539183));
-//        labelRepo.add(createRepoPoi("Paris", "Capital City, France", 48.856614, 2.352222));
-//        labelRepo.add(createRepoPoi("Marseille", "France", 43.296482, 5.36978));
-//        labelRepo.add(createRepoPoi("Rome", "Capital City, Italy", 41.872389, 12.48018));
-//        labelRepo.add(createRepoPoi("Milan", "Italy", 45.465422, 9.185924));
-//        labelRepo.add(createRepoPoi("Madrid", "Capital City, Spain", 40.416775, -3.70379));
-//        labelRepo.add(createRepoPoi("Barcelona", "Spain", 41.385064, 2.173403));
-//        labelRepo.add(createRepoPoi("Lisbon", "Capital City, Portugal", 38.722252, -9.139337));
-//        labelRepo.add(createRepoPoi("London", "Capital City, United Kingdom", 51.507351, -0.127758));
-//        labelRepo.add(createRepoPoi("Manchester", "United Kingdom", 53.479324, -2.248485));
-//        labelRepo.add(createRepoPoi("Dublin", "Capital City, Ireland", 53.349805, -6.26031));
-//        labelRepo.add(createRepoPoi("Copenhagen", "Capital City, Denmark", 55.676097, 12.568337));
-//        labelRepo.add(createRepoPoi("Oslo", "Capital City, Norway", 59.913869, 10.752245));
-//        labelRepo.add(createRepoPoi("Stockholm", "Capital City, Sweden", 59.329323, 18.068581));
-//        labelRepo.add(createRepoPoi("New York", "United States", 40.712784, -74.005941));
-//        labelRepo.add(createRepoPoi("Washington, D.C.", "Capital City, United States", 38.907192, -77.036871));
-//        labelRepo.add(createRepoPoi("Miami", "United States", 25.789097, -80.204044));
-//        labelRepo.add(createRepoPoi("Las Vegas", "United States", 36.169941, -115.13983));
-//        labelRepo.add(createRepoPoi("Silicon Valley", "United States", 37.362517, -122.03476));
-//        labelRepo.add(createRepoPoi("Ottawa", "Capital City, Canada", 45.42153, -75.697193));
-//        labelRepo.add(createRepoPoi("Vancouver", "Canada", 49.261226, -123.1139268));
-//    }
+
 
     /**
      * adds 4 points in cardinal direction at current location
