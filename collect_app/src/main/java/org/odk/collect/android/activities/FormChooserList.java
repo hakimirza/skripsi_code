@@ -22,9 +22,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -115,6 +117,8 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         // get uri to form
         long idFormsTable = getListAdapter().getItemId(position);
         Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
+        Toast.makeText(this, formUri.toString(), Toast.LENGTH_SHORT).show();
+        Log.d("septiawan_form_choser",formUri.toString());
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 formUri.toString());

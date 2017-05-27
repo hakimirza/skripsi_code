@@ -62,6 +62,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+
 import org.apache.http.message.BasicNameValuePair;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceAttitude;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceProperties;

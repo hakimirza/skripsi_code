@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.augmentedreality.MainActivity;
 import org.odk.collect.android.preferences.PreferenceKeys;
 
 import java.io.File;
@@ -116,7 +117,7 @@ public class SplashScreenActivity extends Activity {
     private void endSplashScreen() {
 
         // launch new activity and close splash screen
-        startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
+        startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
         finish();
     }
 

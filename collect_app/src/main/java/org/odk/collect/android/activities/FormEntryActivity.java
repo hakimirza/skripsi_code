@@ -32,6 +32,7 @@ import android.provider.MediaStore.Images;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
@@ -244,6 +245,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
+
+        Log.d("septiawan","form_entry_activity");
 
         setContentView(R.layout.form_entry);
         setTitle(getString(R.string.loading_form));

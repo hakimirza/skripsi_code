@@ -47,6 +47,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.augmentedreality.MainActivity;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.database.ItemsetDbAdapter;
+import org.odk.collect.android.downloadinstance.Download;
 import org.odk.collect.android.downloadinstance.Notifikasi;
 import org.odk.collect.android.downloadinstance.DownloadInstances;
 import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
@@ -121,23 +123,22 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
         mEnterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Collect.getInstance().getActivityLogger()
-//                        .logAction(this, "fillBlankForm", "click");
-//                Intent i = new Intent(getApplicationContext(),
-//                        FormChooserList.class);
-//                startActivity(i);
-                Notifikasi notifikasi = new Notifikasi();
-                notifikasi.setId(1);
-                notifikasi.setUnique_id_instance("uuid:3f3d9d92-cc5f-4663-8609-fa9a46c0bf78");
-                notifikasi.setNim("13.7868");
-                notifikasi.setNama("Septiawan Aji Pradana");
-                notifikasi.setKortim("13.7868");
-                notifikasi.setStatus_isian("true");
-                notifikasi.setStatus("clear");
-                notifikasi.setFilename("file");
-                notifikasi.setForm_id("build_Skripsi_1494392082");
-                startDownload(notifikasi,Collect.FORMS_PATH + File.separator
-                        + "Skripsi.xml");
+                Collect.getInstance().getActivityLogger()
+                        .logAction(this, "fillBlankForm", "click");
+                Intent i = new Intent(getApplicationContext(),
+                        FormChooserList.class);
+                startActivity(i);
+//                Notifikasi notifikasi = new Notifikasi();
+//                notifikasi.setId(1);
+//                notifikasi.setUnique_id_instance("uuid:c4471e0e-f47c-4757-879b-5116951f8ed7");
+//                notifikasi.setNim("13.7868");
+//                notifikasi.setNama("Septiawan Aji Pradana");
+//                notifikasi.setKortim("13.7868");
+//                notifikasi.setStatus_isian("true");
+//                notifikasi.setStatus("clear");
+//                notifikasi.setFilename("file");
+//                startDownload(notifikasi,Collect.FORMS_PATH + File.separator
+//                        + "skripsi_2.xml");
             }
         });
 
@@ -186,6 +187,7 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
             }
         });
 
+        //
         // manage forms button. no result expected.
         mGetFormsButton = (Button) findViewById(R.id.get_forms);
         mGetFormsButton.setText(getString(R.string.get_forms));
@@ -396,14 +398,14 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 .enableAutoActivityTracking(true);
     }
 
-    public void startDownload(Notifikasi ds,String finalFinalPath){
+    public void startDownload(Download download, String finalFinalPath){
         synchronized (bb) {
-            DownloadInstances downloadIsian = new DownloadInstances(ds, finalFinalPath, MainMenuActivity.this, this);
+            DownloadInstances downloadIsian = new DownloadInstances(download, MainMenuActivity.this, this);
             downloadIsian.exscute();
         }
     }
 
-    public void onpostdownload(boolean mboolean,Notifikasi mnotif){
+    public void onpostdownload(boolean mboolean,Download download){
         if(mboolean){
             Toast.makeText(this, "File Download Completed", Toast.LENGTH_SHORT)
                     .show();

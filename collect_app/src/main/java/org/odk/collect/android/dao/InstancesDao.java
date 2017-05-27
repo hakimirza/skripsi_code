@@ -228,7 +228,7 @@ public class InstancesDao {
                 .query(InstanceProviderAPI.InstanceColumns.CONTENT_URI, projection, selection, selectionArgs, sortOrder);
     }
 
-    public Uri saveInstance(ContentValues values) {
+    public Uri  saveInstance(ContentValues values) {
         return Collect.getInstance().getContentResolver().insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
     }
 

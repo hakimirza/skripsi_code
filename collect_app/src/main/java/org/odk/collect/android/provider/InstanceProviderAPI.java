@@ -53,6 +53,9 @@ public final class InstanceProviderAPI {
         public static final String INSTANCE_FILE_PATH = "instanceFilePath";
         public static final String JR_FORM_ID = "jrFormId";
         public static final String JR_VERSION = "jrVersion";
+
+        //aji
+        public static final String UUID = "uuid";
         //public static final String FORM_ID = "formId";
 
         // these are generated for you (but you can insert something else if you want)

@@ -2,16 +2,22 @@ package org.odk.collect.android.augmentedreality;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.formisian.BangunanSensusOnMaps;
 import org.odk.collect.android.augmentedreality.formisian.SetLocationActivity;
 import org.odk.collect.android.augmentedreality.scan.ARPortraitActivity;
+import org.odk.collect.android.dao.InstancesDao;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -66,8 +72,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_to_odk, menu);
+        return true;
+    }
 
-//    public void startARLandscape(View view) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_to_odk:
+                Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //    public void startARLandscape(View view) {
 //        Intent intent = new Intent(this, ARLandscapeActivity.class);
 //        startActivity(intent);
 //    }

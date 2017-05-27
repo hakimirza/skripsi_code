@@ -17,6 +17,7 @@ package org.odk.collect.android.tasks;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.FormDef;
@@ -104,6 +105,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         protected void free() {
             controller = null;
         }
+
+
     }
 
     FECWrapper data;
@@ -112,6 +115,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         mInstancePath = instancePath;
         mXPath = xpath;
         mWaitingXPath = waitingXPath;
+        Log.d("septiawan","form_loader_task");
     }
 
     /**
@@ -584,6 +588,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     }
 
     private void readCSV(File csv, String formHash, String pathHash) {
+
+        Log.d("septiawan_formhash",formHash);
+        Log.d("septiawan_pathHash",pathHash);
 
         CSVReader reader;
         ItemsetDbAdapter ida = new ItemsetDbAdapter();

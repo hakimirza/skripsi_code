@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -114,6 +115,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                         cursor.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                         String md5 = cursor.getString(
                                 cursor.getColumnIndex(FormsColumns.MD5_HASH));
+                        Log.d("septiawan_sql_file_name",sqlFilename);
+                        Log.d("septiawan_md5",md5);
                         File sqlFile = new File(sqlFilename);
                         if (sqlFile.exists()) {
                             // remove it from the list of forms (we only want forms
@@ -126,6 +129,8 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
                                 String id = cursor.getString(
                                         cursor.getColumnIndex(FormsColumns._ID));
                                 Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
+
+                                Log.d("septiawan_update_uri",updateUri.toString());
                                 uriToUpdate.add(new UriFile(updateUri, sqlFile));
                             }
                         } else {
@@ -135,7 +140,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 
                             String id = cursor.getString(
                                     cursor.getColumnIndex(FormsColumns._ID));
-
+                            Log.d("septiawan_id_cursor",id);
                             idsToDelete.add(id);
                         }
                     }

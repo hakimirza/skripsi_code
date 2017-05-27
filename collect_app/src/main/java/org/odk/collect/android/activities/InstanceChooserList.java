@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -32,6 +33,7 @@ import org.odk.collect.android.adapters.ViewSentListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceSyncTask;
@@ -144,6 +146,11 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
             }
             finish();
         }
+
+//        final FormController formController = Collect.getInstance()
+//                .getFormController();
+//
+//        Log.d("septiawan_uuid_yeah",formController.getSubmissionMetadata().instanceId);
     }
 
     @Override
@@ -217,6 +224,18 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
         } else {
             cursor = new InstancesDao().getSentInstancesCursor(getFilterText(), getSortingOrder());
         }
+
+        Log.d("septiawan_cursor",Integer.toString(cursor.getColumnCount()));
+        if(cursor.getCount()>0){
+            cursor.moveToPosition(-1);
+            while(cursor.moveToNext()){
+                Log.d("septiawan_cursor_ket",cursor.getString(cursor.getColumnIndex(InstanceColumns.JR_FORM_ID)));
+                if(cursor.getString(cursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)) != null){
+                    Log.d("septiawan_cursor_ket",cursor.getString(cursor.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH)));
+                }
+            }
+        }
+
 
         return cursor;
     }

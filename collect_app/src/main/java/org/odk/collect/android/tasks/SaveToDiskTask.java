@@ -18,6 +18,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.javarosa.form.api.FormEntryController;
@@ -64,10 +65,11 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
 
 
     public SaveToDiskTask(Uri uri, Boolean saveAndExit, Boolean markCompleted, String updatedName) {
-        mUri = uri;
+        mUri = uri; //alamat formnya
         mSave = saveAndExit;
         mMarkCompleted = markCompleted;
         mInstanceName = updatedName;
+        Log.d("septiawan_uri_save",mUri.toString());
     }
 
 
@@ -89,6 +91,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             if (validateStatus != FormEntryController.ANSWER_OK) {
                 // validation failed, pass specific failure
                 saveResult.setSaveResult(validateStatus);
+
                 return saveResult;
             }
         } catch (Exception e) {
@@ -184,6 +187,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
             // 'save data' option from the menu. So try to update first, then make a new one if that
             // fails.
             String instancePath = formController.getInstancePath().getAbsolutePath();
+            String uuid = formController.getSubmissionMetadata().instanceId;
             String where = InstanceColumns.INSTANCE_FILE_PATH + "=?";
             String[] whereArgs = {
                     instancePath
@@ -212,6 +216,7 @@ public class SaveToDiskTask extends AsyncTask<Void, String, SaveResult> {
                     // add missing fields into values
                     values.put(InstanceColumns.INSTANCE_FILE_PATH, instancePath);
                     values.put(InstanceColumns.SUBMISSION_URI, submissionUri);
+                    values.put(InstanceColumns.UUID, uuid);
                     if (mInstanceName != null) {
                         values.put(InstanceColumns.DISPLAY_NAME, mInstanceName);
                     } else {

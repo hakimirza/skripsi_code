@@ -26,11 +26,23 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.downloadinstance.Download;
+import org.odk.collect.android.dto.Instance;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -40,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -203,8 +216,95 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
     @Override
     public void uploadingComplete(HashMap<String, String> result) {
-        Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
-                result.size(), mInstancesToSend.length);
+        Log.d("septiawan_haspam",result.toString());
+//        Timber.i("uploadingComplete: Processing results (%d) from upload of %d instances!",
+//                result.size(), mInstancesToSend.length);
+//
+//        try {
+//            dismissDialog(PROGRESS_DIALOG);
+//        } catch (Exception e) {
+//            // tried to close a dialog not open. don't care.
+//        }
+//
+//
+//        Set<String> keys = result.keySet();
+//        Iterator<String> it = keys.iterator();
+//
+//        StringBuilder message = new StringBuilder();
+//        int count = keys.size();
+//        while (count > 0) {
+//            String[] selectionArgs = null;
+//
+//            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
+//                selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
+//            } else {
+//                selectionArgs = new String[count];
+//            }
+//
+//            StringBuilder selection = new StringBuilder();
+//            selection.append(InstanceColumns._ID + " IN (");
+//
+//            int i = 0;
+//            while (it.hasNext() && i < selectionArgs.length) {
+//                selectionArgs[i] = it.next();
+//                selection.append("?");
+//
+//                if (i != selectionArgs.length - 1) {
+//                    selection.append(",");
+//                }
+//                i++;
+//            }
+//
+//            selection.append(")");
+//            count -= selectionArgs.length;
+//
+//            StringBuilder queryMessage = new StringBuilder();
+//            Cursor results = null;
+//            try {
+//                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+//                if (results.getCount() > 0) {
+//                    results.moveToPosition(-1);
+//                    while (results.moveToNext()) {
+//                        String name =
+//                                results.getString(
+//                                        results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
+//                        String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
+//                        Log.d("septiawan_id",id);
+//                        queryMessage.append(name + " - " + result.get(id) + "\n\n");
+//                    }
+//                }
+//            } catch (SQLException e) {
+//                Timber.e(e);
+//            } finally {
+//                if (results != null) {
+//                    results.close();
+//                }
+//            }
+//            message.append(queryMessage.toString());
+//
+//        }
+//        if (message.length() == 0) {
+//            message.append(getString(R.string.no_forms_uploaded));
+//        }
+//
+//        Iterator<String> its = keys.iterator();
+//        StringBuilder selection1 = new StringBuilder();
+//        String[] selectionArgs1 = new String[keys.size()];
+//        int i1 = 0;
+//        while (its.hasNext()) {
+//            String id = its.next();
+//            if(result.get(id).equals(Collect.getInstance().getString(R.string.success))) {
+//                selection1.append(InstanceColumns._ID + "=?");
+//                selectionArgs1[i1++] = id;
+//                if (i1 != keys.size()) {
+//                    selection1.append(" or ");
+//                }
+//            }
+//        }
+//        getInstanceIdentity(selection1,selectionArgs1);
+//        createAlertDialog(message.toString().trim());
+        String t = "septiawan_uploading";
+        Log.i(t, "uploadingComplete: Processing results (" + result.size() + ") from upload of " + mInstancesToSend.length + " instances!");
 
         try {
             dismissDialog(PROGRESS_DIALOG);
@@ -212,64 +312,61 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             // tried to close a dialog not open. don't care.
         }
 
-
+        StringBuilder selection = new StringBuilder();
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
 
+        String[] selectionArgs = new String[keys.size()];
+        int i = 0;
+        while (it.hasNext()) {
+            String id = it.next();
+            selection.append(InstanceColumns._ID + "=?");
+            selectionArgs[i++] = id;
+            if (i != keys.size()) {
+                selection.append(" or ");
+            }
+        }
+
         StringBuilder message = new StringBuilder();
-        int count = keys.size();
-        while (count > 0) {
-            String[] selectionArgs = null;
-
-            if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER) {
-                selectionArgs = new String[ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
-            } else {
-                selectionArgs = new String[count];
-            }
-
-            StringBuilder selection = new StringBuilder();
-            selection.append(InstanceColumns._ID + " IN (");
-
-            int i = 0;
-            while (it.hasNext() && i < selectionArgs.length) {
-                selectionArgs[i] = it.next();
-                selection.append("?");
-
-                if (i != selectionArgs.length - 1) {
-                    selection.append(",");
-                }
-                i++;
-            }
-
-            selection.append(")");
-            count -= selectionArgs.length;
-
-            StringBuilder queryMessage = new StringBuilder();
+        {
             Cursor results = null;
             try {
-                results = new InstancesDao().getInstancesCursor(selection.toString(), selectionArgs);
+                results = getContentResolver().query(InstanceColumns.CONTENT_URI,
+                        null, selection.toString(), selectionArgs, null);
                 if (results.getCount() > 0) {
                     results.moveToPosition(-1);
                     while (results.moveToNext()) {
                         String name =
-                                results.getString(
-                                        results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                                results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                         String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
-                        queryMessage.append(name + " - " + result.get(id) + "\n\n");
+                        message.append(name + " - " + result.get(id) + "\n\n");
                     }
+                } else {
+                    message.append(getString(R.string.no_forms_uploaded));
                 }
-            } catch (SQLException e) {
-                Timber.e(e);
             } finally {
-                if (results != null) {
+                if ( results != null ) {
                     results.close();
                 }
             }
-            message.append(queryMessage.toString());
         }
-        if (message.length() == 0) {
-            message.append(getString(R.string.no_forms_uploaded));
+        Iterator<String> its = keys.iterator();
+
+        StringBuilder selection1 = new StringBuilder();
+        String[] selectionArgs1 = new String[keys.size()];
+        int i1 = 0;
+        while (its.hasNext()) {
+            String id = its.next();
+            if(result.get(id).equals("full submission upload was successful!")) {
+                selection1.append(InstanceColumns._ID + "=?");
+                selectionArgs1[i1++] = id;
+                if (i1 != keys.size()) {
+                    selection1.append(" or ");
+                }
+            }
         }
+
+        getParameter(selection1, selectionArgs1);
         createAlertDialog(message.toString().trim());
     }
 
@@ -405,5 +502,77 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     @Override
     public void cancelledUpdatingCredentials() {
         finish();
+    }
+
+    //aji
+
+    public void getParameter (StringBuilder as ,String[] ids){
+        JSONObject js = new JSONObject();
+        String [] proj = new String[2];
+        ArrayList<Download> downloads= new ArrayList<Download>();
+
+        proj[0]=InstanceColumns.UUID;
+        proj[1]=InstanceColumns.JR_FORM_ID;
+        Cursor results = null;
+        try {
+            results = getContentResolver().query(InstanceColumns.CONTENT_URI,
+                    proj, as.toString(), ids, null);
+
+            if(results != null){
+                Log.d("septiawan_cursor",Integer.toString(results.getColumnCount()));
+            }else{
+                Log.d("septiawan_cuk","bah");
+            }
+            if (results.getCount() > 0) {
+                JSONArray array = new JSONArray();
+                results.moveToPosition(-1);
+
+                while (results.moveToNext()) {
+                    HashMap<String,String> parameter = new HashMap<>();
+                    Log.d("septiawan_upload_","terlewati_ye_3");
+                    if(results.getString(results.getColumnIndex(InstanceColumns.UUID))!=null
+                            &&!results.getString(results.getColumnIndex(InstanceColumns.UUID)).equals("")){
+                        parameter.put("uuid",results.getString(results.getColumnIndex(InstanceColumns.UUID)));
+                    }
+                    parameter.put("form_id",results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID)));
+                    Log.d("septiawan_uuid_array",array.toString());
+                }
+                js.put("data",array);
+            }
+            else{
+                Log.d("UploadErrorDanIns ", "tidak ada result");
+            }
+        }catch (Exception ex){
+            Log.d("Json_error",""+ex);
+        }
+        finally {
+            if ( results != null ) {
+                results.close();
+            }
+        }
+        Log.d("UploadErrorDanIns ", js.toString());
+    }
+
+    public void sendData(final HashMap<String,String> parameter){
+        StringRequest send = new StringRequest(Request.Method.POST, "", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param = parameter;
+
+                return param;
+            }
+        };
+
+        Collect.getInstance2().addToRequestQueue(send);
     }
 }

@@ -76,6 +76,7 @@ public class InstanceProvider extends ContentProvider {
                     + InstanceColumns.INSTANCE_FILE_PATH + " text not null, "
                     + InstanceColumns.JR_FORM_ID + " text not null, "
                     + InstanceColumns.JR_VERSION + " text, "
+                    + InstanceColumns.UUID+ " text, "
                     + InstanceColumns.STATUS + " text not null, "
                     + InstanceColumns.LAST_STATUS_CHANGE_DATE + " date not null, "
                     + InstanceColumns.DISPLAY_SUBTEXT + " text not null,"
@@ -445,6 +446,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_SUBTEXT,
                 InstanceColumns.DISPLAY_SUBTEXT);
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
+        sInstancesProjectionMap.put(InstanceColumns.UUID, InstanceColumns.UUID);
     }
 
 }

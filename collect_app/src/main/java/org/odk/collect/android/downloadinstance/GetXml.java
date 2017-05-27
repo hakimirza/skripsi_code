@@ -40,6 +40,7 @@ public class GetXml implements downloadxmllistener, commondownloadlistener {
     private Context mcontext;
     private DownloadPcl mDownloadPcl;
     private Notifikasi mNotif;
+    private Download download;
     private static Object object=new Object();
     private static Object ob = new Object();
     private ParamsGet para;
@@ -64,8 +65,8 @@ public class GetXml implements downloadxmllistener, commondownloadlistener {
 
     public void onPostExecute(DocumentFetchResult documentFetchResult) {
 
-        File file = new File(Collect.INSTANCES_PATH+"/"+ FileSystemUtils.asFilesystemSafeName(mNotif.getUnique_id_instance())
-                +"/"+ FileSystemUtils.asFilesystemSafeName(mNotif.getUnique_id_instance())+".xml");
+        File file = new File(Collect.INSTANCES_PATH+"/"+ FileSystemUtils.asFilesystemSafeName(download.getUuid())
+                +"/"+ FileSystemUtils.asFilesystemSafeName(download.getUuid())+".xml");
 //        if(file.exists()){
 //            ContentValues values = new ContentValues();
 //            values.put(org.odk.collect.android.downloadinstance.InstanceProviderAPI.InstanceColumns.UUID," ");
@@ -84,9 +85,9 @@ public class GetXml implements downloadxmllistener, commondownloadlistener {
 //        }
 
     }
-    public void setDownloadpcl(DownloadPcl a,Notifikasi notif){
+    public void setDownloadpcl(DownloadPcl a,Download download){
         mDownloadPcl=a;
-        mNotif=notif;
+        download = download;
     }
     private static final String MD5_COLON_PREFIX = "md5:";
     public void downloadSubmissionWithOutTerminationFuturre(File formInstancesDir, BriefcaseFormDefinition lfd, FormStatus fs, String uri, String instancedira, ServerConnectionInfo serverInfo) throws Exception {
@@ -430,10 +431,10 @@ public class GetXml implements downloadxmllistener, commondownloadlistener {
                 }
             }
             onPostExecute(null);
-            mDownloadPcl.onpostdownload(complete,mNotif);
+            mDownloadPcl.onpostdownload(complete,download);
         }else {
             onPostExecute(null);
-            mDownloadPcl.onpostdownload(complete,mNotif);
+            mDownloadPcl.onpostdownload(complete,download);
         }
 
     }
@@ -453,7 +454,7 @@ public class GetXml implements downloadxmllistener, commondownloadlistener {
         OutputStreamWriter fo = new OutputStreamWriter(new FileOutputStream(submissionFile), "UTF-8");
         fo.write(submissionManifest.submissionXml);
         fo.close();
-        mDownloadPcl.onpostdownload(true,mNotif);
+        mDownloadPcl.onpostdownload(true,download);
 
     }
 

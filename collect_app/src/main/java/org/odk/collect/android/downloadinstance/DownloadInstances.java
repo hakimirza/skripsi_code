@@ -23,17 +23,16 @@ import java.io.File;
 /**
  * Created by Cloud Walker on 24/02/2016.
  */
-public class DownloadInstances {
-    private Notifikasi ds;
-    private String finalFinalPath;
+public class  DownloadInstances {
+    private Download download;
     private Context mcontext;
     private DownloadPcl mdownloadpcl;
 
-    public DownloadInstances(Notifikasi ds, String finalFinalPath, Context mcontext, DownloadPcl mdownloadpcl){
-        this.ds=ds;
-        this.finalFinalPath=finalFinalPath;
+    public DownloadInstances(Download download, Context mcontext, DownloadPcl mdownloadpcl){
+        this.download=download;
         this.mcontext=mcontext;
         this.mdownloadpcl=mdownloadpcl;
+        Log.d("septiawan_final_path",download.getFormPath());
     }
     public void exscute(){
         SharedPreferences settings =
@@ -51,7 +50,7 @@ public class DownloadInstances {
         File dir = null;
         File formxml = null;
         try {
-            formxml = new File(finalFinalPath);
+            formxml = new File(download.getFormPath());
             Log.d("MainActiviry xml", formxml.getAbsolutePath());
             Log.d("MainActiviry xml", FileUtils.readFileToString(formxml));
         } catch (Exception Ex) {
@@ -72,9 +71,9 @@ public class DownloadInstances {
         } catch (Exception ex) {
             Log.d("MainActivity", "form stat" + ex);
         }
-        ParamsGet as = new ParamsGet(dir, lfd, fs, "uuid:3f3d9d92-cc5f-4663-8609-fa9a46c0bf78", Collect.INSTANCES_PATH, serverinfo);
+        ParamsGet as = new ParamsGet(dir, lfd, fs, download.getUuid(), Collect.INSTANCES_PATH, serverinfo);
         GetXml get = new GetXml(mcontext);
-        get.setDownloadpcl(mdownloadpcl, ds);
+        get.setDownloadpcl(mdownloadpcl, download);
         get.doInBackground(as);
     }
 
