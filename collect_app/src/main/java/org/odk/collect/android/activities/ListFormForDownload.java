@@ -1,17 +1,3 @@
-/*
- * Copyright (C) 2009 University of Washington
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- */
-
 package org.odk.collect.android.activities;
 
 import android.app.AlertDialog;
@@ -28,25 +14,35 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.downloadinstance.Download;
+import org.odk.collect.android.downloadinstance.DownloadInstances;
+import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
+import org.odk.collect.android.koneksi.AlamatServer;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
+import org.odk.collect.android.provider.FormsProvider;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.tasks.DiskSyncTask;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
+
+import java.util.ArrayList;
 
 import timber.log.Timber;
 
 /**
- * Responsible for displaying all the valid forms in the forms directory. Stores the path to
- * selected form for use by {@link MainMenuActivity}.
- *
- * @author Yaw Anokwa (yanokwa@gmail.com)
- * @author Carl Hartung (carlhartung@gmail.com)
+ * Created by Septiawan Aji Pradan on 5/28/2017.
  */
-public class FormChooserList extends FormListActivity implements DiskSyncListener {
+
+public class ListFormForDownload extends FormListActivity implements DiskSyncListener,DownloadPcl {
     private static final String FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder";
 
     private static final boolean EXIT = true;
@@ -55,6 +51,7 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     private DiskSyncTask mDiskSyncTask;
 
     private AlertDialog mAlertDialog;
+    private static final Object bb= new Object();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +88,8 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
                 getString(R.string.sort_by_name_asc), getString(R.string.sort_by_name_desc),
                 getString(R.string.sort_by_date_asc), getString(R.string.sort_by_date_desc),
         };
+        getIdForm();
+
     }
 
 
@@ -116,18 +115,24 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
     protected void onListItemClick(ListView listView, View view, int position, long id) {
         // get uri to form
         long idFormsTable = getListAdapter().getItemId(position);
-        Uri formUri = ContentUris.withAppendedId(FormsColumns.CONTENT_URI, idFormsTable);
+        Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.FormsColumns.CONTENT_URI, idFormsTable);
         Toast.makeText(this, formUri.toString(), Toast.LENGTH_SHORT).show();
         Log.d("septiawan_form_choser",formUri.toString());
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 formUri.toString());
-
+        String formId = FormsProviderAPI.FormsColumns.FORM_FILE_PATH;
         String action = getIntent().getAction();
+        Log.d("aji_form_id",formId);
         if (Intent.ACTION_PICK.equals(action)) {
             // caller is waiting on a picked form
             setResult(RESULT_OK, new Intent().setData(formUri));
         } else {
+//            Download download = new Download();
+//            download.setFormPath(formId);
+//            download.setUuid("uuid:42d6492f-5903-40ac-8106-8903cfa5685e");
+//            startDownload(download);
+            Toast.makeText(this, formId, Toast.LENGTH_SHORT).show();
             // caller wants to view/edit a form, so launch formentryactivity
 
 //            Intent intent = new Intent(Intent.ACTION_EDIT, formUri);
@@ -183,14 +188,14 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
 
     private void setupAdapter() {
         String[] data = new String[]{
-                FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_SUBTEXT, FormsColumns.JR_VERSION
+                FormsProviderAPI.FormsColumns.DISPLAY_NAME, FormsProviderAPI.FormsColumns.DISPLAY_SUBTEXT, FormsProviderAPI.FormsColumns.JR_VERSION
         };
         int[] view = new int[]{
                 R.id.text1, R.id.text2, R.id.text3
         };
 
         mListAdapter =
-                new VersionHidingCursorAdapter(FormsColumns.JR_VERSION, this, R.layout.two_item, getCursor(), data, view);
+                new VersionHidingCursorAdapter(FormsProviderAPI.FormsColumns.JR_VERSION, this, R.layout.two_item, getCursor(), data, view);
 
         setListAdapter(mListAdapter);
     }
@@ -240,4 +245,75 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         mAlertDialog.show();
     }
 
+    public void getUUID(String idForm){
+        final ArrayList<String> uuids = new ArrayList<>();
+        StringRequest getuuid = new StringRequest(Request.Method.GET, AlamatServer.ALAMAT_SERVER + AlamatServer.GET, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject jsonObject = new JSONObject(response);
+                    if(jsonObject.getString("status").equals("true")){
+                        JSONArray jsonArray = jsonObject.getJSONArray("instances");
+                        for(int i=0;i<jsonArray.length();i++){
+                            JSONObject uuid = jsonArray.getJSONObject(i);
+                            uuids.add(uuid.getString("uuid"));
+                        }
+                    }
+                    Log.d("list_uuid",uuids.toString());
+                }catch (Exception e){
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
+    public void startDownload(Download download){
+        synchronized (bb) {
+            DownloadInstances downloadIsian = new DownloadInstances(download, getApplicationContext(), this);
+            downloadIsian.exscute();
+        }
+    }
+
+    @Override
+    public void onpostdownload(boolean mboolean, Download download) {
+        if(mboolean){
+            Toast.makeText(this, "File Download Completed", Toast.LENGTH_SHORT)
+                    .show();
+//            ItemsetDbAdapter dbas = new ItemsetDbAdapter();
+//            dbas.open();
+//            dbas.updatedown(mnotif);
+//            dbas.close();
+        }else{
+            Toast.makeText(this,"File Download not Completed", Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
+    public ArrayList<String> getIdForm (){
+        ArrayList<String> idForms = new ArrayList<>();
+        FormsDao formDao = new FormsDao();
+        Cursor cursor = null;
+        try{
+            cursor = formDao.getFormsCursor();
+            if(cursor==null){
+                Log.d("list_id_form","null");
+            }
+
+            cursor.moveToPosition(-1);
+
+            while (cursor.moveToNext()){
+                String idForm = cursor.getString(cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_FORM_ID));
+                idForms.add(idForm);
+            }
+        }catch (Exception e){
+            Log.d("list_id_form",e.toString());
+        }
+        Log.d("aji_id_form",idForms.toString());
+        return idForms;
+    }
 }

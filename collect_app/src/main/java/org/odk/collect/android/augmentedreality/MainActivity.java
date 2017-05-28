@@ -8,23 +8,28 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.ListFormForDownload;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.formisian.BangunanSensusOnMaps;
 import org.odk.collect.android.augmentedreality.formisian.SetLocationActivity;
 import org.odk.collect.android.augmentedreality.scan.ARPortraitActivity;
 import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.utilities.ToastUtils;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
 //    private final static int REQUEST_CAMERA_PERMISSIONS_CODE = 11;
 //    public static final int REQUEST_LOCATION_PERMISSIONS_CODE = 0;
     private RelativeLayout scanTempat,inputData,lihatPeta,editFoto;
+    private Button downnload;
     private DatabaseHandler databaseHandler;
+    private ListFormForDownload listFormForDownload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +38,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         scanTempat = (RelativeLayout) findViewById(R.id.rl_scan_tempat);
         inputData = (RelativeLayout) findViewById(R.id.rl_input_data);
         lihatPeta = (RelativeLayout) findViewById(R.id.rl_peta);
+        downnload = (Button)findViewById(R.id.download_briefcase_bt);
         databaseHandler = new DatabaseHandler(getApplicationContext());
+
+        listFormForDownload = new ListFormForDownload();
         scanTempat.setOnClickListener(this);
         inputData.setOnClickListener(this);
         lihatPeta.setOnClickListener(this);
+        downnload.setOnClickListener(this);
     }
 
     @Override
@@ -69,6 +78,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 intent = new Intent(this, BangunanSensusOnMaps.class);
                 startActivity(intent);
             }
+        }else if(view==downnload){
+//            Intent i = new Intent(getApplicationContext(), ListFormForDownload.class);
+//            startActivity(i);
+            listFormForDownload.getIdForm();
         }
     }
 

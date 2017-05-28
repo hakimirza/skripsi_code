@@ -119,48 +119,14 @@
 
             </LinearLayout>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download Briefcase"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/download_briefcase_bt"/>
 
-
-
-        <!--<Button-->
-            <!--android:id="@+id/scan_tempat"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentLeft="false"-->
-            <!--android:layout_alignParentRight="false"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:text="Scan Tempat" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/input_data"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentLeft="false"-->
-            <!--android:layout_alignParentRight="false"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:text="Input Data" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/lihat_peta"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentLeft="false"-->
-            <!--android:layout_alignParentRight="false"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:text="Lihat Peta" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/edit_foto"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentLeft="false"-->
-            <!--android:layout_alignParentRight="false"-->
-            <!--android:layout_margin="8dp"-->
-            <!--android:text="Edit Foto" />-->
     </LinearLayout>
 
 

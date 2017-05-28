@@ -128,17 +128,7 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 Intent i = new Intent(getApplicationContext(),
                         FormChooserList.class);
                 startActivity(i);
-//                Notifikasi notifikasi = new Notifikasi();
-//                notifikasi.setId(1);
-//                notifikasi.setUnique_id_instance("uuid:c4471e0e-f47c-4757-879b-5116951f8ed7");
-//                notifikasi.setNim("13.7868");
-//                notifikasi.setNama("Septiawan Aji Pradana");
-//                notifikasi.setKortim("13.7868");
-//                notifikasi.setStatus_isian("true");
-//                notifikasi.setStatus("clear");
-//                notifikasi.setFilename("file");
-//                startDownload(notifikasi,Collect.FORMS_PATH + File.separator
-//                        + "skripsi_2.xml");
+
             }
         });
 
@@ -398,7 +388,7 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 .enableAutoActivityTracking(true);
     }
 
-    public void startDownload(Download download, String finalFinalPath){
+    public void startDownload(Download download){
         synchronized (bb) {
             DownloadInstances downloadIsian = new DownloadInstances(download, MainMenuActivity.this, this);
             downloadIsian.exscute();

@@ -254,6 +254,7 @@ the specific language governing permissions and limitations under the License.
         </activity>
 
         <!-- Tambahan Augmented -->
+        <activity android:name=".activities.ListFormForDownload"/>
         <activity android:name=".augmentedreality.MainActivity"/>
         <activity android:name=".augmentedreality.kamera.KameraAmbilGambar"
             android:theme="@style/Theme.AppCompat.Light"/>
