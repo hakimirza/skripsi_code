@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.downloadinstance.BriefcaseFormDefinition;
 import org.odk.collect.android.downloadinstance.FormStatus;
@@ -16,6 +17,7 @@ import org.odk.collect.android.downloadinstance.ServerConnectionInfo;
 import org.odk.collect.android.downloadinstance.GetXml;
 import org.odk.collect.android.downloadinstance.ParamsGet;
 import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
+import org.odk.collect.android.preferences.PreferenceKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 
 import java.io.File;
@@ -32,13 +34,12 @@ public class  DownloadInstances {
         this.download=download;
         this.mcontext=mcontext;
         this.mdownloadpcl=mdownloadpcl;
-        Log.d("septiawan_final_path",download.getFormPath());
     }
     public void exscute(){
         SharedPreferences settings =
                 PreferenceManager.getDefaultSharedPreferences(mcontext);
 //        final String server = settings.getString(PreferencesActivity.KEY_SERVER_URL,  Collect.getInstance().getString(R.string.default_server_url));
-        final String server = settings.getString(PreferencesActivity.KEY_SERVER_URL, "https://capi-se.appspot.com/");
+        final String server = settings.getString(PreferencesActivity.KEY_SERVER_URL, PreferenceKeys.KEY_SERVER_URL);
 
         final String storedUsername = settings.getString(PreferencesActivity.KEY_USERNAME, "");
         final String storedPassword = settings.getString(PreferencesActivity.KEY_PASSWORD, "");

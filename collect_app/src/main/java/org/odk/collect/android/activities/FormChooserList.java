@@ -130,9 +130,9 @@ public class FormChooserList extends FormListActivity implements DiskSyncListene
         } else {
             // caller wants to view/edit a form, so launch formentryactivity
 
-//            Intent intent = new Intent(Intent.ACTION_EDIT, formUri);
-//            intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
-//            startActivity(intent);
+            Intent intent = new Intent(Intent.ACTION_EDIT, formUri);
+            intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            startActivity(intent);
         }
 
         finish();

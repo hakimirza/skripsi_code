@@ -245,39 +245,7 @@ public class ListFormForDownload extends FormListActivity implements DiskSyncLis
         mAlertDialog.show();
     }
 
-    public void getUUID(String idForm){
-        final ArrayList<String> uuids = new ArrayList<>();
-        StringRequest getuuid = new StringRequest(Request.Method.GET, AlamatServer.ALAMAT_SERVER + AlamatServer.GET, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try{
-                    JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.getString("status").equals("true")){
-                        JSONArray jsonArray = jsonObject.getJSONArray("instances");
-                        for(int i=0;i<jsonArray.length();i++){
-                            JSONObject uuid = jsonArray.getJSONObject(i);
-                            uuids.add(uuid.getString("uuid"));
-                        }
-                    }
-                    Log.d("list_uuid",uuids.toString());
-                }catch (Exception e){
 
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-    }
-
-    public void startDownload(Download download){
-        synchronized (bb) {
-            DownloadInstances downloadIsian = new DownloadInstances(download, getApplicationContext(), this);
-            downloadIsian.exscute();
-        }
-    }
 
     @Override
     public void onpostdownload(boolean mboolean, Download download) {
