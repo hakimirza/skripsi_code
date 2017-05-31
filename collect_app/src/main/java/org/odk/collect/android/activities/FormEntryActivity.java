@@ -643,11 +643,17 @@ public class FormEntryActivity extends Activity implements AnimationListener,
                 // The intent is empty, but we know we saved the image to the temp
                 // file
                 File fi = new File(Collect.TMPFILE_PATH);
+                //dapet path foto
                 String instanceFolder = formController.getInstancePath()
                         .getParent();
                 String s = instanceFolder + File.separator
                         + System.currentTimeMillis() + ".jpg";
+                /*
+                    Masukan ke database instanceFolder dan s nya, ini untuk instances yang hasil
+                    pencacahan langsung
+                 */
 
+                Log.d("aji_nama_foto",s);
                 File nf = new File(s);
                 if (!fi.renameTo(nf)) {
                     Timber.e("Failed to rename %s", fi.getAbsolutePath());

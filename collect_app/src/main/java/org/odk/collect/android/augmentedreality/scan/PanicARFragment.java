@@ -135,7 +135,7 @@ public class PanicARFragment extends PARFragment {
         poiLocation.setLatitude(lat);
         poiLocation.setLongitude(lon);
 
-        final PARPoiLabel parPoiLabel = new PARPoiLabel(poiLocation, title, description, R.layout.sticker_label, R.drawable.ic_rumah,pathFoto);
+        final PARPoiLabel parPoiLabel = new PARPoiLabel(poiLocation, title, description, R.layout.sticker_label, R.drawable.ic_dot_blue,pathFoto);
 
         parPoiLabel.setOnClickListener(new View.OnClickListener() {
             @Override

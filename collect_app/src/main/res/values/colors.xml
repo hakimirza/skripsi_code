@@ -19,12 +19,12 @@ the License.
     <drawable name="black">#ff000000</drawable>
     <color name="light_blue">#2196F3</color>
 
-    <color name="colorPrimary">#ffa500</color>
-    <color name="colorPrimaryDark">#cc8400</color>
+    <color name="colorPrimary">#3968ea</color>
+    <color name="colorPrimaryDark">#2d53bb</color>
     <color name="white">#ffffff</color>
-    <color name="colorAccent">#005aff</color>
+    <color name="colorAccent">#ea3968</color>
     <color name="transparent">#00ffffff</color>
 
-    <color name="primary_transparent">#80ffa500</color>
+    <color name="primary_transparent">#803968ea</color>
 
 </resources>

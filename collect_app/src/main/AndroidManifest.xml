@@ -278,9 +278,12 @@ the specific language governing permissions and limitations under the License.
         </activity>
         <activity android:name=".augmentedreality.formisian.SetLocationActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".landingpage.LandingPageActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <service
             android:name=".augmentedreality.formisian.FetchAddressIntentService"
             android:exported="false" />
+
 
 
         <!-- Enable Shortcuts for Command Actions -->

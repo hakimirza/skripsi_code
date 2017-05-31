@@ -112,9 +112,12 @@ public class InstanceChooserList extends InstanceListActivity implements DiskSyn
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick",
                 instanceUri.toString());
+        Log.d("septiawan_uri_getPath",instanceUri.getPath());
+        Log.d("septiawan_uri_toString",instanceUri.toString());
 
         if (view.findViewById(R.id.visible_off).getVisibility() != View.VISIBLE) {
             String action = getIntent().getAction();
+            setResult(RESULT_OK, new Intent().setData(instanceUri));
             if (Intent.ACTION_PICK.equals(action)) {
                 // caller is waiting on a picked form
                 setResult(RESULT_OK, new Intent().setData(instanceUri));
