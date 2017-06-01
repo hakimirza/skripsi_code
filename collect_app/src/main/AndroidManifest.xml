@@ -280,6 +280,9 @@ the specific language governing permissions and limitations under the License.
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name=".landingpage.LandingPageActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".aksesdata.ParsingForm"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+
         <service
             android:name=".augmentedreality.formisian.FetchAddressIntentService"
             android:exported="false" />

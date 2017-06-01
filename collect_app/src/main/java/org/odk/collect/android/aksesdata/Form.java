@@ -7,6 +7,7 @@ package org.odk.collect.android.aksesdata;
 public class Form {
     private String pathForm;
     private String idForm;
+    private String displayName;
 
     public String getPathForm() {
         return pathForm;
@@ -22,5 +23,13 @@ public class Form {
 
     public void setIdForm(String idForm) {
         this.idForm = idForm;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

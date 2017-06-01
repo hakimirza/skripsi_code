@@ -50,6 +50,7 @@ public class StikerLabel extends PARPoi {
 
     public StikerLabel(Location location, ArrayList<String> keterangan, int layoutId, int radarResourceId){
         super(location);
+        Log.d("aji_keterangan",keterangan.toString());
         this.keterangan = keterangan;
         this.layoutId = layoutId;
         this.radarResourceId = radarResourceId;
@@ -67,70 +68,6 @@ public class StikerLabel extends PARPoi {
     public static void setDefaultSize(Point defaultSize) {
         PARPoiLabel.defaultSize = defaultSize;
     }
-
-    public String getSls(){
-        return this.keterangan.get(0);
-    }
-
-    public String getFisik(){
-        return this.keterangan.get(1);
-    }
-
-    public String getSensus(){
-        return this.keterangan.get(2);
-    }
-
-    public String getJarak(){
-        return this.keterangan.get(3);
-    }
-
-    public String getPathFoto(){
-        return this.keterangan.get(4);
-    }
-
-    public void setSls(String sls){
-        if(this.keterangan.get(0) != sls){
-            this.keterangan.set(0,sls);
-            if(this.slsTv != null){
-                this.slsTv.setText(keterangan.get(0));
-            }
-        }
-    }
-
-    public  void setFisik(String fisik){
-        if(this.keterangan.get(1) != fisik){
-            this.keterangan.set(1,fisik);
-            if(this.fisikTv != null){
-                this.fisikTv.setText(keterangan.get(1));
-            }
-        }
-    }
-
-    public  void setSensus(String sensus){
-        if(this.keterangan.get(2) != sensus){
-            this.keterangan.set(2,sensus);
-            if(this.sensusTv != null){
-                this.sensusTv.setText(keterangan.get(2));
-            }
-        }
-    }
-
-    public  void setJarak(String jarak){
-        if(this.keterangan.get(3) != jarak){
-            this.keterangan.set(2,jarak);
-            if(this.sensusTv != null){
-                this.jarakTv.setText(keterangan.get(3));
-            }
-        }
-    }
-
-    public void setPathFoto(String pathFoto){
-        if(this.keterangan.get(4) != pathFoto){
-            this.keterangan.set(4,pathFoto);
-        }
-    }
-
-
 
     @Override
     protected Point getOffset() {
@@ -180,10 +117,12 @@ public class StikerLabel extends PARPoi {
         this.fotoBangunan = (ImageView)this._labelView.findViewById(R.id.foto_bangunan);
 
         slsTv.setText(keterangan.get(0));
+        fisikTv.setText(keterangan.get(1));
+        sensusTv.setText(keterangan.get(2));
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
-        final Bitmap bitmap = BitmapFactory.decodeFile(getPathFoto(), options);
+        final Bitmap bitmap = BitmapFactory.decodeFile(keterangan.get(3), options);
         this.fotoBangunan.setImageBitmap(bitmap);
 
 
@@ -197,27 +136,28 @@ public class StikerLabel extends PARPoi {
             return;
         }
         double distance = this.distanceToUser;
+
         if (distance >= 10000.0) {
             if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 1000.0) {
                 return;
             }
             distance = Math.floor(distance / 1000.0);
-            this.keterangan.set(3,FORMATTER_DISTANCE_LARGEST.format(distance));
+            this.keterangan.set(4,FORMATTER_DISTANCE_LARGEST.format(distance));
         } else if (distance > 1000.0) {
             if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 100.0) {
                 return;
             }
             distance = Math.floor(distance / 1000.0);
-            this.keterangan.set(3,FORMATTER_DISTANCE_LARGE.format(distance));
+            this.keterangan.set(4,FORMATTER_DISTANCE_LARGE.format(distance));
         } else {
             if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 10.0) {
                 return;
             }
             distance = Math.floor(distance / 5.0) * 5.0;
-            this.keterangan.set(3,FORMATTER_DISTANCE_SMALL.format(distance));;
+            this.keterangan.set(4,FORMATTER_DISTANCE_SMALL.format(distance));;
         }
         if (this.jarakTv != null) {
-            this.jarakTv.setText((CharSequence)(this.keterangan.get(3)));
+            this.jarakTv.setText((CharSequence)(this.keterangan.get(4)));
         }
         this._lastUpdateAtDistance = (float)this.distanceToUser;
     }

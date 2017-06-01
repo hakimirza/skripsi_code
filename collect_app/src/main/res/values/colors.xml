@@ -27,4 +27,7 @@ the License.
 
     <color name="primary_transparent">#803968ea</color>
 
+    <color name="black_transparent">#80000000</color>
+    <color name="white_transparent">#80FFFFFF</color>
+
 </resources>

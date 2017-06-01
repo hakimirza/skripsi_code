@@ -10,6 +10,9 @@ public class BangunanSensus {
     private Double lat;
     private Double lon;
     private String pathFoto;
+    private String noSensus;
+    private String noFisik;
+    private String sls;
 
     public BangunanSensus(){
 
@@ -59,5 +62,29 @@ public class BangunanSensus {
 
     public void setPathFoto(String pathFoto) {
         this.pathFoto = pathFoto;
+    }
+
+    public String getNoSensus() {
+        return noSensus;
+    }
+
+    public void setNoSensus(String noSensus) {
+        this.noSensus = noSensus;
+    }
+
+    public String getNoFisik() {
+        return noFisik;
+    }
+
+    public void setNoFisik(String noFisik) {
+        this.noFisik = noFisik;
+    }
+
+    public String getSls() {
+        return sls;
+    }
+
+    public void setSls(String sls) {
+        this.sls = sls;
     }
 }

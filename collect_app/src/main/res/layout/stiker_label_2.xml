@@ -23,14 +23,14 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:id="@+id/rl_ket_sls"
-            android:background="#80FFFFFF"
+            android:background="@color/black_transparent"
             android:layout_marginBottom="0.75dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:singleLine="true"
+                android:textColor="@color/white"
                 android:id="@+id/tv_ket_sls"
-                android:text="Karang bayan"
                 android:gravity="center"/>
         </RelativeLayout>
         <LinearLayout
@@ -42,11 +42,11 @@
             <RelativeLayout
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:background="#80FFFFFF"
+                android:background="@color/black_transparent"
                 android:layout_marginLeft="0.75dp"
                 android:layout_marginRight="0.75dp">
                 <TextView
-                    android:id="@+id/tv_fisik"
+                    android:id="@+id/judul_fisik"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -54,16 +54,18 @@
                     android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:text="Fisik"
-                    android:textSize="7dp"
+                    android:textColor="@color/white"
+                    android:textSize="8dp"
                     android:layout_marginTop="1.5dp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/tv_fisik"
+                    android:layout_below="@id/judul_fisik"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="43"
+                    android:id="@+id/tv_fisik"
+                    android:textColor="@color/white"
                     android:textSize="15dp" />
             </RelativeLayout>
             <RelativeLayout
@@ -71,9 +73,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="0.75dp"
                 android:layout_marginRight="0.75dp"
-                android:background="#80FFFFFF">
+                android:background="@color/black_transparent">
                 <TextView
-                    android:id="@+id/tv_sensus"
+                    android:id="@+id/judul_sensus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -81,16 +83,18 @@
                     android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:text="Sensus"
-                    android:textSize="7dp"
+                    android:textSize="8dp"
+                    android:textColor="@color/white"
                     android:layout_marginTop="1.5dp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/tv_sensus"
+                    android:layout_below="@id/judul_sensus"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="53"
+                    android:id="@+id/tv_sensus"
+                    android:textColor="@color/white"
                     android:textSize="15dp" />
             </RelativeLayout>
             <RelativeLayout
@@ -98,9 +102,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="0.75dp"
                 android:layout_marginRight="0.75dp"
-                android:background="#80FFFFFF">
+                android:background="@color/black_transparent">
                 <TextView
-                    android:id="@+id/tv_jr"
+                    android:id="@+id/judul_jr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -108,16 +112,16 @@
                     android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:text="Jarak"
-                    android:textSize="7dp"
+                    android:textSize="8dp"
                     android:layout_marginTop="1.5dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/tv_jr"
+                    android:layout_below="@id/judul_jr"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="20"
+                    android:textColor="@color/white"
                     android:textSize="15dp"
                     android:id="@+id/tv_jarak"/>
             </RelativeLayout>

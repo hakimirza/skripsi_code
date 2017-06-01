@@ -2,9 +2,11 @@ package org.odk.collect.android.augmentedreality.scan;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.LoaderManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ public class CustomModalFotoBs extends Dialog{
         this.activity = activity;
         this.bangunanSensus = bangunanSensus;
         this.pathFoto = pathFoto;
+        Log.d("aji_custom",pathFoto);
     }
 
     @Override
@@ -41,6 +44,7 @@ public class CustomModalFotoBs extends Dialog{
         ketBangunanSesus = (TextView)findViewById(R.id.ket_bangunan_sensus);
         fotoBangunan = (ImageView)findViewById(R.id.gambar_bangunan_sensus);
         BitmapFactory.Options options = new BitmapFactory.Options();
+        Log.d("aji_custom_22",pathFoto);
         options.inSampleSize = 8;
         if(!pathFoto.equals("")){
             final Bitmap bitmap = BitmapFactory.decodeFile(pathFoto, options);

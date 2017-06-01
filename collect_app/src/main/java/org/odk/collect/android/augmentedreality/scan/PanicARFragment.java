@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.aksesdata.AksesDataOdk;
+import org.odk.collect.android.aksesdata.Instances;
+import org.odk.collect.android.aksesdata.ParsingInstances;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.augmentedreality.BangunanSensus;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.arkit.PARController;
@@ -23,7 +28,9 @@ import org.odk.collect.android.augmentedreality.arkit.PARPoiLabelAdvanced;
 import org.odk.collect.android.augmentedreality.arkit.StikerLabel;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceAttitude;
 import org.odk.collect.android.augmentedreality.sensorkit.enums.PSKDeviceOrientation;
+import org.odk.collect.android.logic.FormController;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -38,6 +45,10 @@ public class PanicARFragment extends PARFragment {
     private DatabaseHandler databaseHandler;
     private ArrayList<BangunanSensus> bangunanSensusArrayList;
 
+
+    private AksesDataOdk aksesDataOdk;
+    private ParsingInstances parsingInstances;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,23 +59,43 @@ public class PanicARFragment extends PARFragment {
         databaseHandler = new DatabaseHandler(getActivity());
         bangunanSensusArrayList = databaseHandler.getAll();
 
-        if(bangunanSensusArrayList!= null){
-            for(int i=0;i<bangunanSensusArrayList.size();i++){
-                ArrayList<String> keterangan = new ArrayList<>() ;
-                Location location =  new Location("location");
-                location.setLatitude(bangunanSensusArrayList.get(i).getLat());
-                location.setLongitude(bangunanSensusArrayList.get(i).getLon());
-                keterangan.add(bangunanSensusArrayList.get(i).getNamaKRT());
-                keterangan.add("23");
-                keterangan.add("13");
-                keterangan.add("21");
-                keterangan.add(bangunanSensusArrayList.get(i).getPathFoto());
-                PARController.getInstance().addPoi(create(keterangan,location));
-//                PARController.getInstance().addPoi(createPoi(bangunanSensusArrayList.get(i).getNamaKRT(),bangunanSensusArrayList.get(i).getPathFoto(),
-//                        bangunanSensusArrayList.get(i).getLat(),bangunanSensusArrayList.get(i).getLon(),(bangunanSensusArrayList.get(i).getPathFoto())));
+        aksesDataOdk = new AksesDataOdk();
+        parsingInstances = new ParsingInstances();
+
+        if(aksesDataOdk != null || aksesDataOdk.getKeteranganInstances().size()!=0){
+
+            for (Instances instances : aksesDataOdk.getKeteranganInstances()){
+                try{
+
+                    BangunanSensus bangunanSensus = parsingInstances.parseXml(instances.getPathInstances());
+
+                    String imgPath= aksesDataOdk.getParentDir(instances.getPathInstances())+File.separator+bangunanSensus.getPathFoto();
+                    Log.d("aji_path_foto",imgPath);
+                    Log.d("aji_bangunan",bangunanSensus.getSls());
+                    Log.d("aji_location",""+bangunanSensus.getLat());
+
+                    ArrayList<String> parameter = new ArrayList<>();
+                    Location location = new Location("location");
+                    location.setLatitude(bangunanSensus.getLat());
+                    location.setLongitude(bangunanSensus.getLon());
+
+                    parameter.add(bangunanSensus.getSls());
+                    parameter.add(bangunanSensus.getNoFisik());
+                    parameter.add(bangunanSensus.getNoSensus());
+                    parameter.add(imgPath);
+                    parameter.add("");
+
+                    Log.d("aji_path_foto",imgPath);
+                    Log.d("aji_location",""+location.getLatitude());
+
+                    PARController.getInstance().addPoi( createStiker(parameter,location));
+                }catch (Exception e){
+                    Log.d("aji_eror",e.toString());
+                }
+
             }
         }else{
-            Toast.makeText(getActivity(), "Belum Ada Data", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -123,40 +154,37 @@ public class PanicARFragment extends PARFragment {
     //==============================================================================================
     /**
      * Create a poi with title, description and position
-     *
-     * @param title       Title of poi
-     * @param description Description of poi (if you want none, set this to "")
-     * @param lat         Latitude of poi
-     * @param lon         Longitude of poi
      * @return PARPoiLabel which is a subclass of PARPoi (extended for title, description and so on)
      */
-    public PARPoiLabel createPoi(String title, String description, double lat, double lon, final String pathFoto) {
-        Location poiLocation = new Location(title);
-        poiLocation.setLatitude(lat);
-        poiLocation.setLongitude(lon);
+//    public PARPoiLabel createPoi(String title, String description, double lat, double lon, final String pathFoto) {
+//        Location poiLocation = new Location(title);
+//        poiLocation.setLatitude(lat);
+//        poiLocation.setLongitude(lon);
+//
+//        final PARPoiLabel parPoiLabel = new PARPoiLabel(poiLocation, title, description, R.layout.sticker_label, R.drawable.ic_dot_blue,pathFoto);
+//
+//        parPoiLabel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                Toast.makeText(getActivity(), parPoiLabel.getTitle() + " - " + parPoiLabel.getDescription(), Toast.LENGTH_LONG).show();
+//                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),parPoiLabel.getTitle(),pathFoto);
+//                customModalScan.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                customModalScan.show();
+//            }
+//        });
+//
+//        return parPoiLabel;
+//    }
 
-        final PARPoiLabel parPoiLabel = new PARPoiLabel(poiLocation, title, description, R.layout.sticker_label, R.drawable.ic_dot_blue,pathFoto);
-
-        parPoiLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Toast.makeText(getActivity(), parPoiLabel.getTitle() + " - " + parPoiLabel.getDescription(), Toast.LENGTH_LONG).show();
-                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),parPoiLabel.getTitle(),pathFoto);
-                customModalScan.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                customModalScan.show();
-            }
-        });
-
-        return parPoiLabel;
-    }
-
-    public StikerLabel create(final ArrayList<String> keterangan, Location location){
-        final StikerLabel stiker = new StikerLabel(location,keterangan,R.layout.stiker_label_2,R.drawable.ic_rumah);
+    public StikerLabel createStiker(final ArrayList<String> bangunansensus, Location location){
+        Log.d("aji_bangunan_sensus",bangunansensus.get(3));
+        final StikerLabel stiker = new StikerLabel(location,bangunansensus,R.layout.stiker_label_2,R.drawable.ic_dot_blue);
 
         stiker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),keterangan.get(0),keterangan.get(4));
+                Log.d("aji_bangunan_sensus_67",bangunansensus.get(3));
+                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(0),bangunansensus.get(3));
                 customModalScan.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 customModalScan.show();
             }
@@ -216,9 +244,9 @@ public class PanicARFragment extends PARFragment {
         //double degreeCorrection = 0.0001; // approx 12 meter
         Location currentLocation = PSKDeviceAttitude.sharedDeviceAttitude().getLocation();
 
-        PARController.getInstance().addPoi(createPoi("North", "", currentLocation.getLatitude()+degreeCorrection, currentLocation.getLongitude(),""));
-        PARController.getInstance().addPoi(createPoi("South", "", currentLocation.getLatitude()-degreeCorrection, currentLocation.getLongitude(),""));
-        PARController.getInstance().addPoi(createPoi("West", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()-degreeCorrection,""));
-        PARController.getInstance().addPoi(createPoi("East", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()+degreeCorrection,""));
+//        PARController.getInstance().addPoi(createPoi("North", "", currentLocation.getLatitude()+degreeCorrection, currentLocation.getLongitude(),""));
+//        PARController.getInstance().addPoi(createPoi("South", "", currentLocation.getLatitude()-degreeCorrection, currentLocation.getLongitude(),""));
+//        PARController.getInstance().addPoi(createPoi("West", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()-degreeCorrection,""));
+//        PARController.getInstance().addPoi(createPoi("East", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()+degreeCorrection,""));
     }
 }

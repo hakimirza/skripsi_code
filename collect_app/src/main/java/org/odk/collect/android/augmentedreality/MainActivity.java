@@ -1,6 +1,8 @@
 package org.odk.collect.android.augmentedreality;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -24,7 +26,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ListFormForDownload;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.aksesdata.AksesDataOdk;
+import org.odk.collect.android.aksesdata.Form;
 import org.odk.collect.android.aksesdata.Instances;
+import org.odk.collect.android.aksesdata.ParsingForm;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.formisian.BangunanSensusOnMaps;
@@ -49,6 +53,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
     private DatabaseHandler databaseHandler;
     private ListFormForDownload listFormForDownload;
     private static final Object bb= new Object();
+    private int def;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +99,15 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
             if(databaseHandler.getAll().isEmpty()){
                 Toast.makeText(this, "Belum Ada Data", Toast.LENGTH_SHORT).show();
             }else{
-                intent = new Intent(this, BangunanSensusOnMaps.class);
-                startActivity(intent);
+//                intent = new Intent(this, BangunanSensusOnMaps.class);
+                ParsingForm parsingForm = new ParsingForm();
+                AksesDataOdk aksesDataOdk = new AksesDataOdk();
+                for (int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
+                    Log.d("bismillah",parsingForm.getVariabelForm(aksesDataOdk.getKeteranganForm().get(i).getPathForm()).toString());
+                }
+
+//                intent = new Intent(this, ParsingForm.class);
+//                startActivity(intent);
             }
         }else if(view==downnload){
             downloadInstancesFromServer();
@@ -120,15 +132,6 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    //    public void startARLandscape(View view) {
-//        Intent intent = new Intent(this, ARLandscapeActivity.class);
-//        startActivity(intent);
-//    }
-//public void startARAutoOrienting(View view) {
-//    Intent intent = new Intent(this, ARAutoOrientingActivity.class);
-//    startActivity(intent);
-//}
 
 
     @Override
@@ -189,5 +192,40 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
         });
 
         Collect.getInstance2().addToRequestQueue(downloadFromServer);
+    }
+
+    public void pilihForm(){
+        AksesDataOdk aksesDataOdk = new AksesDataOdk();
+        ArrayList<String> pilihanForm = new ArrayList<>();
+        aksesDataOdk.getKeteranganForm();
+
+        String[] pilihan = new String[pilihanForm.size()];
+        for (int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
+            pilihan[i] = aksesDataOdk.getKeteranganForm().get(i).getDisplayName();
+        }
+
+        def = 0;
+
+        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Pilih Kuesioner")
+                .setSingleChoiceItems(pilihan, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                            def = which;
+                    }
+                })
+                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        dialog.show();
     }
 }
