@@ -1,24 +1,24 @@
 package org.odk.collect.android.augmentedreality;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * Created by Septiawan Aji Pradan on 3/14/2017.
  */
 
-public class BangunanSensus {
+public class Bangunan {
     private int id;
-    private String namaKRT;
     private Double lat;
     private Double lon;
     private String pathFoto;
-    private String noSensus;
-    private String noFisik;
-    private String sls;
+    private String jarak;
+    private ArrayList<String> keteranganBangunan;
 
-    public BangunanSensus(){
+    public Bangunan(){
 
     }
-    public BangunanSensus(String namaKRT, Double lat, Double lon, String pathFoto){
-        this.namaKRT = namaKRT;
+    public Bangunan(Double lat, Double lon, String pathFoto){
         this.lat = lat;
         this.lon = lon;
         this.pathFoto = pathFoto;
@@ -32,13 +32,6 @@ public class BangunanSensus {
         this.id = id;
     }
 
-    public String getNamaKRT() {
-        return namaKRT;
-    }
-
-    public void setNamaKRT(String namaKRT) {
-        this.namaKRT = namaKRT;
-    }
 
     public Double getLat() {
         return lat;
@@ -64,27 +57,20 @@ public class BangunanSensus {
         this.pathFoto = pathFoto;
     }
 
-    public String getNoSensus() {
-        return noSensus;
+
+    public ArrayList<String> getKeteranganBangunan() {
+        return keteranganBangunan;
     }
 
-    public void setNoSensus(String noSensus) {
-        this.noSensus = noSensus;
+    public void setKeteranganBangunan(ArrayList<String> keteranganBangunan) {
+        this.keteranganBangunan = keteranganBangunan;
     }
 
-    public String getNoFisik() {
-        return noFisik;
+    public String getJarak() {
+        return jarak;
     }
 
-    public void setNoFisik(String noFisik) {
-        this.noFisik = noFisik;
-    }
-
-    public String getSls() {
-        return sls;
-    }
-
-    public void setSls(String sls) {
-        this.sls = sls;
+    public void setJarak(String jarak) {
+        this.jarak = jarak;
     }
 }

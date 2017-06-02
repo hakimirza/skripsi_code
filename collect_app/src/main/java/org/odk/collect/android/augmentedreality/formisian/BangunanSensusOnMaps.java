@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.augmentedreality.BangunanSensus;
+import org.odk.collect.android.augmentedreality.Bangunan;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.helper.GPSTracker;
 
@@ -33,9 +33,9 @@ public class BangunanSensusOnMaps extends FragmentActivity implements GoogleMap.
     private GPSTracker gps;
     private double latitude, longitude;
     private LatLng lokasi;
-    private ArrayList<BangunanSensus> arrayBangunanSensus;
+    private ArrayList<Bangunan> arrayBangunanSensus;
     String message;
-    private BangunanSensus tempat;
+    private Bangunan tempat;
 
 
     public LinearLayout layout;
@@ -46,7 +46,7 @@ public class BangunanSensusOnMaps extends FragmentActivity implements GoogleMap.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plot_bs_activity);
         arrayBangunanSensus = new ArrayList<>();
-        tempat = new BangunanSensus();
+        tempat = new Bangunan();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -118,13 +118,13 @@ public class BangunanSensusOnMaps extends FragmentActivity implements GoogleMap.
         LatLng pointAwal = new LatLng(arrayBangunanSensus.get(0).getLat(),arrayBangunanSensus.get(0).getLon());
         awal.position(pointAwal);
         awal.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_loc));
-        awal.title(arrayBangunanSensus.get(0).getNamaKRT());
+//        awal.title(arrayBangunanSensus.get(0).getNamaKRT());
 
         for(int i=0;i<arrayBangunanSensus.size();i++){
 
             LatLng point = new LatLng(arrayBangunanSensus.get(i).getLat(), arrayBangunanSensus.get(i).getLon());
             markerStand.position(point);
-            markerStand.title(arrayBangunanSensus.get(i).getNamaKRT());
+//            markerStand.title(arrayBangunanSensus.get(i).getNamaKRT());
             markerStand.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_loc));
 
             mMap.addMarker(markerStand);

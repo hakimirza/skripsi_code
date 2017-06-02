@@ -34,6 +34,7 @@ import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.formisian.BangunanSensusOnMaps;
 import org.odk.collect.android.augmentedreality.formisian.SetLocationActivity;
 import org.odk.collect.android.augmentedreality.scan.ARPortraitActivity;
+import org.odk.collect.android.augmentedreality.scan.PanicARFragment;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.downloadinstance.Download;
 import org.odk.collect.android.downloadinstance.DownloadInstances;
@@ -194,38 +195,5 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
         Collect.getInstance2().addToRequestQueue(downloadFromServer);
     }
 
-    public void pilihForm(){
-        AksesDataOdk aksesDataOdk = new AksesDataOdk();
-        ArrayList<String> pilihanForm = new ArrayList<>();
-        aksesDataOdk.getKeteranganForm();
 
-        String[] pilihan = new String[pilihanForm.size()];
-        for (int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
-            pilihan[i] = aksesDataOdk.getKeteranganForm().get(i).getDisplayName();
-        }
-
-        def = 0;
-
-        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Pilih Kuesioner")
-                .setSingleChoiceItems(pilihan, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                            def = which;
-                    }
-                })
-                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setNegativeButton("Pilih", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).create();
-        dialog.show();
-    }
 }

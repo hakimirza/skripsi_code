@@ -19,8 +19,8 @@
         android:layout_height="match_parent" />
 
     <org.odk.collect.android.augmentedreality.arkit.PARRadarView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:gravity="center"
         android:background="@drawable/radar_screen"
         android:id="@+id/arRadarView"

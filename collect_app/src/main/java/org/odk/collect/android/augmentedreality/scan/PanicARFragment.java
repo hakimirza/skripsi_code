@@ -1,6 +1,8 @@
 package org.odk.collect.android.augmentedreality.scan;
 
-import android.database.DatabaseErrorHandler;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
@@ -17,10 +19,11 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.aksesdata.AksesDataOdk;
 import org.odk.collect.android.aksesdata.Instances;
+import org.odk.collect.android.aksesdata.ParsingForm;
 import org.odk.collect.android.aksesdata.ParsingInstances;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.augmentedreality.BangunanSensus;
+import org.odk.collect.android.augmentedreality.Bangunan;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
+import org.odk.collect.android.augmentedreality.MainActivity;
 import org.odk.collect.android.augmentedreality.arkit.PARController;
 import org.odk.collect.android.augmentedreality.arkit.PARFragment;
 import org.odk.collect.android.augmentedreality.arkit.PARPoiLabel;
@@ -28,7 +31,7 @@ import org.odk.collect.android.augmentedreality.arkit.PARPoiLabelAdvanced;
 import org.odk.collect.android.augmentedreality.arkit.StikerLabel;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceAttitude;
 import org.odk.collect.android.augmentedreality.sensorkit.enums.PSKDeviceOrientation;
-import org.odk.collect.android.logic.FormController;
+import org.odk.collect.android.dto.Instance;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,11 +46,17 @@ public class PanicARFragment extends PARFragment {
 
     private static ArrayList<PARPoiLabel> labelRepo = new ArrayList<PARPoiLabel>();
     private DatabaseHandler databaseHandler;
-    private ArrayList<BangunanSensus> bangunanSensusArrayList;
+    private ArrayList<Bangunan> bangunanSensusArrayList;
+    private ArrayList<String> keyFromFrom;
+    private ArrayList<Instances> getInstancesByIdForm;
 
-
-    private AksesDataOdk aksesDataOdk;
     private ParsingInstances parsingInstances;
+    private ArrayList<String> key;
+    int def;
+    private ParsingForm parsingForm;
+    AksesDataOdk aksesDataOdk;
+    ArrayList<String> pilihanForm ;
+    private String pathForm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,45 +67,14 @@ public class PanicARFragment extends PARFragment {
         // example to add costume drawable
         databaseHandler = new DatabaseHandler(getActivity());
         bangunanSensusArrayList = databaseHandler.getAll();
+        keyFromFrom = new ArrayList<>();
+        getInstancesByIdForm = new ArrayList<>();
+        parsingForm = new ParsingForm();
 
         aksesDataOdk = new AksesDataOdk();
         parsingInstances = new ParsingInstances();
-
-        if(aksesDataOdk != null || aksesDataOdk.getKeteranganInstances().size()!=0){
-
-            for (Instances instances : aksesDataOdk.getKeteranganInstances()){
-                try{
-
-                    BangunanSensus bangunanSensus = parsingInstances.parseXml(instances.getPathInstances());
-
-                    String imgPath= aksesDataOdk.getParentDir(instances.getPathInstances())+File.separator+bangunanSensus.getPathFoto();
-                    Log.d("aji_path_foto",imgPath);
-                    Log.d("aji_bangunan",bangunanSensus.getSls());
-                    Log.d("aji_location",""+bangunanSensus.getLat());
-
-                    ArrayList<String> parameter = new ArrayList<>();
-                    Location location = new Location("location");
-                    location.setLatitude(bangunanSensus.getLat());
-                    location.setLongitude(bangunanSensus.getLon());
-
-                    parameter.add(bangunanSensus.getSls());
-                    parameter.add(bangunanSensus.getNoFisik());
-                    parameter.add(bangunanSensus.getNoSensus());
-                    parameter.add(imgPath);
-                    parameter.add("");
-
-                    Log.d("aji_path_foto",imgPath);
-                    Log.d("aji_location",""+location.getLatitude());
-
-                    PARController.getInstance().addPoi( createStiker(parameter,location));
-                }catch (Exception e){
-                    Log.d("aji_eror",e.toString());
-                }
-
-            }
-        }else{
-
-        }
+        pilihanForm = new ArrayList<>();
+        pilihForm();
     }
 
     @Override
@@ -136,6 +114,11 @@ public class PanicARFragment extends PARFragment {
             case R.id.action_delete_all_pois:
                 PARController.getInstance().clearObjects();
                 return super.onOptionsItemSelected(item);
+            case R.id.set_ket_stiker:
+                Intent intent = new Intent(getActivity(),AturStikerDialog.class);
+                intent.putExtra("path_form",getPathForm());
+                startActivity(intent);
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -248,5 +231,76 @@ public class PanicARFragment extends PARFragment {
 //        PARController.getInstance().addPoi(createPoi("South", "", currentLocation.getLatitude()-degreeCorrection, currentLocation.getLongitude(),""));
 //        PARController.getInstance().addPoi(createPoi("West", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()-degreeCorrection,""));
 //        PARController.getInstance().addPoi(createPoi("East", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()+degreeCorrection,""));
+    }
+
+    public void pilihForm(){
+        String[] pilihan = new String[aksesDataOdk.getKeteranganForm().size()];
+        for (int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
+            pilihan[i] = aksesDataOdk.getKeteranganForm().get(i).getDisplayName();
+        }
+
+        def = 0;
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("Pilih Kuesioner")
+                .setSingleChoiceItems(pilihan, 0,  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        def = which;
+                    }
+                })
+                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setPathForm(def);
+                        setAr(def);
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        dialog.show();
+    }
+
+    public void setPathForm(int def){
+        pathForm = aksesDataOdk.getKeteranganForm().get(def).getPathForm();
+    }
+
+    public String getPathForm(){
+        return pathForm;
+    }
+
+    public void setAr(int which){
+        ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
+        getInstancesByIdForm = aksesDataOdk.getKeteranganInstancesbyIdForm(aksesDataOdk.getKeteranganForm().get(which).getIdForm());
+        keyFromFrom = parsingForm.getVariabelForm(aksesDataOdk.getKeteranganForm().get(which).getPathForm());
+
+        for (Instances instances : getInstancesByIdForm){
+            try{
+                bangunanArrayList.add(parsingInstances.getValue(instances.getPathInstances(),keyFromFrom));
+            }catch (Exception e){
+
+            }
+        }
+
+        for (Bangunan bangunan : bangunanArrayList){
+            ArrayList<String> parameter = new ArrayList<>();
+            Location location = new Location("location");
+            location.setLatitude(bangunan.getLat());
+            location.setLongitude(bangunan.getLon());
+
+            parameter.add(bangunan.getPathFoto());
+            parameter.add(bangunan.getJarak());
+
+            for (int i=0; i<bangunan.getKeteranganBangunan().size();i++){
+                parameter.add(bangunan.getKeteranganBangunan().get(i));
+            }
+            Log.d("wulan",parameter.toString());
+
+            PARController.getInstance().addPoi( createStiker(parameter,location));
+        }
     }
 }

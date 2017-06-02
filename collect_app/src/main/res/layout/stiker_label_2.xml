@@ -64,6 +64,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:id="@+id/tv_fisik"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
@@ -94,6 +95,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="center"
                     android:id="@+id/tv_sensus"
+                    android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
             </RelativeLayout>
@@ -121,6 +123,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="15dp"
                     android:id="@+id/tv_jarak"/>

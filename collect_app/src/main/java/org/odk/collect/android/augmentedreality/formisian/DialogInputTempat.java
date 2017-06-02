@@ -11,9 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.augmentedreality.BangunanSensus;
+import org.odk.collect.android.augmentedreality.Bangunan;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
-import org.odk.collect.android.augmentedreality.kamera.KameraAmbilGambar;
 
 
 /**
@@ -27,7 +26,7 @@ public class DialogInputTempat extends Dialog implements View.OnClickListener {
     private Activity activity;
     private EditText namaTempat;
     private TextView tutupBtn, simpanBtn;
-    private BangunanSensus bs;
+    private Bangunan bs;
     private double latitude,longitude;
     private DatabaseHandler db;
 
@@ -58,12 +57,12 @@ public class DialogInputTempat extends Dialog implements View.OnClickListener {
     public void onClick(View view) {
         if(view==simpanBtn){
             if(namaTempat.getText().length()!=0){
-                Intent intent = new Intent(activity, KameraAmbilGambar.class);
-                intent.putExtra("nama",namaTempat.getText().toString());
-                intent.putExtra("lat",latitude);
-                intent.putExtra("lon",longitude);
-                activity.startActivity(intent);
-//                bs = new BangunanSensus(namaTempat.getText().toString(),latitude,longitude,);
+//                Intent intent = new Intent(activity, KameraAmbilGambar.class);
+//                intent.putExtra("nama",namaTempat.getText().toString());
+//                intent.putExtra("lat",latitude);
+//                intent.putExtra("lon",longitude);
+//                activity.startActivity(intent);
+//                bs = new Bangunan(namaTempat.getText().toString(),latitude,longitude,);
 //                db.insertTabel(bs);
 //                Intent intent = new Intent();
 //                intent.putExtra(LATITUDE,latitude);

@@ -116,13 +116,13 @@ public class StikerLabel extends PARPoi {
         this.jarakTv = (TextView)this._labelView.findViewById(R.id.tv_jarak);
         this.fotoBangunan = (ImageView)this._labelView.findViewById(R.id.foto_bangunan);
 
-        slsTv.setText(keterangan.get(0));
-        fisikTv.setText(keterangan.get(1));
+        slsTv.setText(keterangan.get(4));
+        fisikTv.setText(keterangan.get(3));
         sensusTv.setText(keterangan.get(2));
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
-        final Bitmap bitmap = BitmapFactory.decodeFile(keterangan.get(3), options);
+        final Bitmap bitmap = BitmapFactory.decodeFile(keterangan.get(0), options);
         this.fotoBangunan.setImageBitmap(bitmap);
 
 
@@ -142,22 +142,22 @@ public class StikerLabel extends PARPoi {
                 return;
             }
             distance = Math.floor(distance / 1000.0);
-            this.keterangan.set(4,FORMATTER_DISTANCE_LARGEST.format(distance));
+            this.keterangan.set(1,FORMATTER_DISTANCE_LARGEST.format(distance));
         } else if (distance > 1000.0) {
             if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 100.0) {
                 return;
             }
             distance = Math.floor(distance / 1000.0);
-            this.keterangan.set(4,FORMATTER_DISTANCE_LARGE.format(distance));
+            this.keterangan.set(1,FORMATTER_DISTANCE_LARGE.format(distance));
         } else {
             if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 10.0) {
                 return;
             }
             distance = Math.floor(distance / 5.0) * 5.0;
-            this.keterangan.set(4,FORMATTER_DISTANCE_SMALL.format(distance));;
+            this.keterangan.set(1,FORMATTER_DISTANCE_SMALL.format(distance));;
         }
         if (this.jarakTv != null) {
-            this.jarakTv.setText((CharSequence)(this.keterangan.get(4)));
+            this.jarakTv.setText((CharSequence)(this.keterangan.get(1)));
         }
         this._lastUpdateAtDistance = (float)this.distanceToUser;
     }

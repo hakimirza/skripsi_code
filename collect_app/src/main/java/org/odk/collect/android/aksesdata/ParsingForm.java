@@ -28,7 +28,6 @@ public class ParsingForm {
         arrayVariabel = new ArrayList<>();
         try {
             FileInputStream is = new FileInputStream(new File(dir));
-//            InputStream is = this.getAssets().open("parse.xml");
             Document doc =
                     DocumentBuilderFactory
                             .newInstance()

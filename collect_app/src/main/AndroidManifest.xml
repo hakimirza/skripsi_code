@@ -256,31 +256,32 @@ the specific language governing permissions and limitations under the License.
         <!-- Tambahan Augmented -->
         <activity android:name=".activities.ListFormForDownload"/>
         <activity android:name=".augmentedreality.MainActivity"/>
-        <activity android:name=".augmentedreality.kamera.KameraAmbilGambar"
             android:theme="@style/Theme.AppCompat.Light"/>
         <activity android:name=".augmentedreality.formisian.BangunanSensusOnMaps"/>
         <activity
             android:name=".augmentedreality.scan.ARLandscapeActivity"
             android:label="Landscape-only AR"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
         <activity
             android:name=".augmentedreality.scan.ARPortraitActivity"
             android:label="Portrait-only AR"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".augmentedreality.scan.ARAutoOrientingActivity"
             android:label="Auto-orienting AR"
-            android:configChanges="keyboardHidden|orientation|screenSize" >
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
         <activity android:name=".augmentedreality.formisian.SetLocationActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name=".landingpage.LandingPageActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".aksesdata.ParsingForm"
+        <activity android:name=".augmentedreality.scan.AturStikerDialog"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
 
         <service

@@ -2,8 +2,7 @@ package org.odk.collect.android.aksesdata;
 
 import android.util.Log;
 
-import org.odk.collect.android.augmentedreality.BangunanSensus;
-import org.odk.collect.android.augmentedreality.formisian.BangunanSensusOnMaps;
+import org.odk.collect.android.augmentedreality.Bangunan;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -11,6 +10,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Septiawan Aji Pradan on 5/31/2017.
@@ -19,9 +20,11 @@ import java.io.IOException;
 public class ParsingInstances {
     private XmlPullParserFactory xmlPullParserFactory;
 
-    public BangunanSensus parseXml(String directory) throws IOException{
-        BangunanSensus bangunanSensus = new BangunanSensus();
+    public Bangunan getValue(String directory,ArrayList<String> key) throws IOException{
+        Bangunan bangunan = new Bangunan();
+        ParsingForm parsingForm = new ParsingForm();
         try{
+
             xmlPullParserFactory = XmlPullParserFactory.newInstance();
             xmlPullParserFactory.setNamespaceAware(false);
             XmlPullParser parser = xmlPullParserFactory.newPullParser();
@@ -29,37 +32,104 @@ public class ParsingInstances {
             File file = new File(directory);
             FileInputStream is = new FileInputStream(file);
             parser.setInput(is,null);
-            bangunanSensus = getLoadedCmlValues(parser);
+            bangunan = parseXml(parser,key,directory);
+
         }catch (XmlPullParserException e){
             e.printStackTrace();
         }
-        return bangunanSensus;
+        return bangunan;
     }
 
-    private BangunanSensus getLoadedCmlValues(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private Bangunan parseXml(XmlPullParser parser, ArrayList<String> ket,String dir) throws XmlPullParserException, IOException {
         int eventType = parser.getEventType();
+        AksesDataOdk aksesDataOdk = new AksesDataOdk();
         String name = null;
-        BangunanSensus bangunanSensus = new BangunanSensus();
+        ArrayList<String> prse = new ArrayList<>();
+        Bangunan bangunan  = new Bangunan();
         while(eventType != XmlPullParser.END_DOCUMENT){
             if(eventType == XmlPullParser.START_TAG){
                 name = parser.getName();
-                //no_sensus,no_fisik,sls,foto_bangunan,location
-                if(name.equals("no_sensus")){
-                    bangunanSensus.setNoSensus(parser.nextText());
-                }else if(name.equals("no_fisik")){
-                    bangunanSensus.setNoFisik(parser.nextText());
-                }else if(name.equals("sls")){
-                    bangunanSensus.setSls(parser.nextText());
-                }else if(name.equals("location")){
+                bangunan.setJarak("");
+                if(name.equals("location")){
                     String[] poin = parser.nextText().split(" ");
-                    bangunanSensus.setLat(Double.parseDouble(poin[0]));
-                    bangunanSensus.setLon(Double.parseDouble(poin[1]));
+                    bangunan.setLat(Double.parseDouble(poin[0]));
+                    bangunan.setLon(Double.parseDouble(poin[1]));
                 }else if(name.equals("foto_bangunan")){
-                    bangunanSensus.setPathFoto(parser.nextText());
+                    String imgPath= aksesDataOdk.getParentDir(dir)+File.separator+ parser.nextText();
+                    bangunan.setPathFoto(imgPath);
+                }else{
+                    if(!name.equals("location") && !name.equals("foto_bangunan")){
+                        for (int i=0;i<ket.size();i++){
+                            if(name.equals(ket.get(i))){
+                                prse.add(parser.nextText());
+                            }
+                        }
+                    }
                 }
+
+                Log.d("septiawan_aji",prse.toString());
+                bangunan.setKeteranganBangunan(prse);
+//                //no_sensus,no_fisik,sls,foto_bangunan,location
+//                if(name.equals("no_sensus")){
+//                    bangunan.setNoSensus(parser.nextText());
+//                }else if(name.equals("no_fisik")){
+//                    bangunan.setNoFisik(parser.nextText());
+//                }else if(name.equals("sls")){
+//                    bangunan.setSls(parser.nextText());
+//                }else if(name.equals("location")){
+//                    String[] poin = parser.nextText().split(" ");
+//                    bangunan.setLat(Double.parseDouble(poin[0]));
+//                    bangunan.setLon(Double.parseDouble(poin[1]));
+//                }else if(name.equals("foto_bangunan")){
+//                    bangunan.setPathFoto(parser.nextText());
+//                }
             }
             eventType = parser.next();
         }
-        return bangunanSensus;
+        return bangunan;
     }
+
+    public String getValueByKey(String directory,String key) throws IOException{
+        Bangunan bangunan = new Bangunan();
+        ParsingForm parsingForm = new ParsingForm();
+        String value = "";
+        try{
+            ArrayList<String> ket = new ArrayList<>();
+
+            xmlPullParserFactory = XmlPullParserFactory.newInstance();
+            xmlPullParserFactory.setNamespaceAware(false);
+            XmlPullParser parser = xmlPullParserFactory.newPullParser();
+            ket = parsingForm.getVariabelForm(directory);
+
+            File file = new File(directory);
+            FileInputStream is = new FileInputStream(file);
+            parser.setInput(is,null);
+            value = parseXmlByKey(parser,key);
+
+        }catch (XmlPullParserException e){
+            e.printStackTrace();
+        }
+        return value;
+    }
+
+    private String parseXmlByKey(XmlPullParser parser,String key) throws XmlPullParserException, IOException {
+        int eventType = parser.getEventType();
+        String name = null;
+        String value = "";
+        while(eventType != XmlPullParser.END_DOCUMENT){
+            if(eventType == XmlPullParser.START_TAG){
+                name = parser.getName();
+                if(name.equals(key)){
+                  value = parser.nextText();
+                }
+
+                Log.d("septiawan_aji",value.toString());
+
+            }
+            eventType = parser.next();
+        }
+        return value;
+    }
+
+
 }

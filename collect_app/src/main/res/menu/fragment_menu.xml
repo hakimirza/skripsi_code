@@ -14,4 +14,7 @@
     <item android:id="@+id/action_delete_all_pois"
         android:title="@string/action_delete_all_pois"
         android:showAsAction="never" />
+    <item android:id="@+id/set_ket_stiker"
+        android:title="Atur Stiker"
+        android:showAsAction="never" />
 </menu>

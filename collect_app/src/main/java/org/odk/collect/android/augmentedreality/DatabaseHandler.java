@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import org.odk.collect.android.downloadinstance.Download;
-
 import java.util.ArrayList;
 
 /**
@@ -69,11 +67,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertTabel(BangunanSensus bs){
+    public void insertTabel(Bangunan bs){
         try{
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values= new ContentValues();
-            values.put(NAMA_KRT,bs.getNamaKRT());
+//            values.put(NAMA_KRT,bs.getNamaKRT());
             values.put(LAT,bs.getLat());
             values.put(LONG,bs.getLon());
             values.put(PATH_FOTO,bs.getPathFoto());
@@ -83,9 +81,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Log.d("insert_gps",e.toString());
         }
     }
-    public ArrayList<BangunanSensus> getAll(){
-        ArrayList<BangunanSensus> array = new ArrayList<>();
-        BangunanSensus bs;
+    public ArrayList<Bangunan> getAll(){
+        ArrayList<Bangunan> array = new ArrayList<>();
+        Bangunan bs;
 //        try{
         SQLiteDatabase sql = this.getReadableDatabase();
         String query = "SELECT "+ID+","+NAMA_KRT+","+LAT+","+LONG+","+PATH_FOTO+" FROM "+TABLE_BANGUNAN;
@@ -93,9 +91,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if(c.moveToFirst()){
             do{
-                bs = new BangunanSensus();
+                bs = new Bangunan();
                 bs.setId(c.getInt(c.getColumnIndex(ID)));
-                bs.setNamaKRT(c.getString(c.getColumnIndex(NAMA_KRT)));
+//                bs.setNamaKRT(c.getString(c.getColumnIndex(NAMA_KRT)));
                 bs.setLat(c.getDouble(c.getColumnIndex(LAT)));
                 bs.setLon(c.getDouble(c.getColumnIndex(LONG)));
                 bs.setPathFoto(c.getString(c.getColumnIndex(PATH_FOTO)));

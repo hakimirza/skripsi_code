@@ -87,6 +87,7 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
     private static final int MENU_ABOUT = Menu.FIRST;
     private static final int MENU_PREFERENCES = Menu.FIRST + 1;
     private static final int MENU_ADMIN = Menu.FIRST + 2;
+    private static final int MENU_AR = Menu.FIRST + 3;
     private static final boolean EXIT = true;
     // buttons
     private Button mEnterDataButton;
@@ -446,6 +447,9 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 .add(0, MENU_ADMIN, 0, R.string.admin_preferences)
                 .setIcon(R.drawable.ic_menu_login)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(0,MENU_AR,0,"Ar")
+                .setIcon(R.drawable.ic_menu_preferences)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         return true;
     }
 
@@ -483,6 +487,9 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                             .logAction(this, "createAdminPasswordDialog", "show");
                 }
                 return true;
+            case MENU_AR :
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
