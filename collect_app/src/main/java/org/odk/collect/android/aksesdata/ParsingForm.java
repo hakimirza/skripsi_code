@@ -1,10 +1,5 @@
 package org.odk.collect.android.aksesdata;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Button;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

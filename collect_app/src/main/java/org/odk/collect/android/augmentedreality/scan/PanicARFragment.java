@@ -167,7 +167,7 @@ public class PanicARFragment extends PARFragment {
             @Override
             public void onClick(View v) {
                 Log.d("aji_bangunan_sensus_67",bangunansensus.get(3));
-                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(0),bangunansensus.get(3));
+                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(3));
                 customModalScan.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 customModalScan.show();
             }

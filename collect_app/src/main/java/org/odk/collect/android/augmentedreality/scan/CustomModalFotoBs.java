@@ -22,15 +22,13 @@ import org.odk.collect.android.augmentedreality.koneksi.VolleySingletonImage;
 
 public class CustomModalFotoBs extends Dialog{
     private Activity activity;
-    private String bangunanSensus;
     private TextView ketBangunanSesus;
     private ImageView fotoBangunan;
     private ImageLoader imageLoader;
     private String pathFoto;
-    CustomModalFotoBs(Activity activity, String bangunanSensus, String pathFoto){
+    CustomModalFotoBs(Activity activity,String pathFoto){
         super(activity);
         this.activity = activity;
-        this.bangunanSensus = bangunanSensus;
         this.pathFoto = pathFoto;
         Log.d("aji_custom",pathFoto);
     }
@@ -50,7 +48,6 @@ public class CustomModalFotoBs extends Dialog{
             final Bitmap bitmap = BitmapFactory.decodeFile(pathFoto, options);
             fotoBangunan.setImageBitmap(bitmap);
         }
-        ketBangunanSesus.setText(bangunanSensus);
     }
 
 }

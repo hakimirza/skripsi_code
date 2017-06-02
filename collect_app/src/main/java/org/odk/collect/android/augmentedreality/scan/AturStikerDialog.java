@@ -1,8 +1,6 @@
 package org.odk.collect.android.augmentedreality.scan;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +28,8 @@ public class AturStikerDialog extends AppCompatActivity implements View.OnClickL
     int def;
     String pathForm;
     ArrayList<String> kec;
+    String pilihan;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,7 @@ public class AturStikerDialog extends AppCompatActivity implements View.OnClickL
         tooltipWindow = new TooltipWindow(AturStikerDialog.this);
         parsingForm = new ParsingForm();
         kec = new ArrayList<>();
+
         rl_1.setOnClickListener(this);
         rl_2.setOnClickListener(this);
         rl_3.setOnClickListener(this);
@@ -59,49 +60,33 @@ public class AturStikerDialog extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if(v==rl_1){
-            pilihanVariabel(kec,v);
-
+            pilihanVariabel(v,tv_1);
         }else if(v==rl_2){
-            pilihanVariabel(kec,v);
+            pilihanVariabel(v,tv_2);
         }else if(v==rl_3){
-            pilihanVariabel(kec,v);
+            pilihanVariabel(v,tv_3);
         }
     }
 
     public ArrayList<String> getKeyForm (){
         Log.d("wulan_path",pathForm);
-        ArrayList<String> keyForm = new ArrayList<>();
+        ArrayList<String> keyForm  = new ArrayList<>();
         keyForm = parsingForm.getVariabelForm(pathForm);
         Log.d("wulan_key",keyForm.toString());
         return keyForm;
     }
 
-    public void pilihanVariabel(ArrayList<String> kecuali,final View v){
-        String[] variabel = new String[getKeyForm().size()];
-//        for (int i=0;i<getKeyForm().size();i++){
-//                if(kecuali != null){
-//                    for (int j=0;j<kecuali.size();i++){
-//                        if(!getKeyForm().get(i).equals(kecuali.get(j))){
-//                            variabel[i] = getKeyForm().get(i);
-//                        }
-//                    }
-//                }else{
-//                    variabel[i] = getKeyForm().get(i);
-//                }
-//            }
+    public void pilihanVariabel(final View v,final TextView tv){
+        final String[] variabel = new String[getKeyForm().size()];
+
 
         for (int i=0;i<getKeyForm().size();i++) {
             if(!getKeyForm().get(i).equals("foto_bangunan") || !getKeyForm().get(i).equals("location")){
                 variabel[i] = getKeyForm().get(i);
             }
-
         }
 
-
-            Log.d("wulan_kecuali",kec.toString());
-
             def = 0;
-
             AlertDialog dialog = new AlertDialog.Builder(AturStikerDialog.this)
                     .setTitle("Atur Variabel")
                     .setSingleChoiceItems(variabel, 0,  new DialogInterface.OnClickListener() {
@@ -118,6 +103,8 @@ public class AturStikerDialog extends AppCompatActivity implements View.OnClickL
                             }else{
                                 tooltipWindow.dismissTooltip();
                             }
+                            pilihan = variabel[def];
+                            tv.setText(pilihan);
                         }
                     })
                     .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -127,6 +114,7 @@ public class AturStikerDialog extends AppCompatActivity implements View.OnClickL
                         }
                     }).create();
             dialog.show();
+        
     }
 
 }

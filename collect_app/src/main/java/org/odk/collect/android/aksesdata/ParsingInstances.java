@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Septiawan Aji Pradan on 5/31/2017.
@@ -22,9 +21,7 @@ public class ParsingInstances {
 
     public Bangunan getValue(String directory,ArrayList<String> key) throws IOException{
         Bangunan bangunan = new Bangunan();
-        ParsingForm parsingForm = new ParsingForm();
         try{
-
             xmlPullParserFactory = XmlPullParserFactory.newInstance();
             xmlPullParserFactory.setNamespaceAware(false);
             XmlPullParser parser = xmlPullParserFactory.newPullParser();
@@ -90,16 +87,11 @@ public class ParsingInstances {
     }
 
     public String getValueByKey(String directory,String key) throws IOException{
-        Bangunan bangunan = new Bangunan();
-        ParsingForm parsingForm = new ParsingForm();
         String value = "";
         try{
-            ArrayList<String> ket = new ArrayList<>();
-
             xmlPullParserFactory = XmlPullParserFactory.newInstance();
             xmlPullParserFactory.setNamespaceAware(false);
             XmlPullParser parser = xmlPullParserFactory.newPullParser();
-            ket = parsingForm.getVariabelForm(directory);
 
             File file = new File(directory);
             FileInputStream is = new FileInputStream(file);
@@ -122,9 +114,7 @@ public class ParsingInstances {
                 if(name.equals(key)){
                   value = parser.nextText();
                 }
-
                 Log.d("septiawan_aji",value.toString());
-
             }
             eventType = parser.next();
         }
