@@ -52,7 +52,7 @@ public class StikerLabel extends PARPoi {
 
     public StikerLabel(ArrayList<String> key,Location location, ArrayList<String> keterangan, int layoutId, int radarResourceId){
         super(location);
-        Log.d("aji_keterangan",keterangan.toString());
+        Log.d("cinta_stiker_ket",keterangan.toString());
         this.keterangan = keterangan;
         this.layoutId = layoutId;
         this.radarResourceId = radarResourceId;
@@ -121,9 +121,9 @@ public class StikerLabel extends PARPoi {
         this.judulKolom2 = (TextView)this._labelView.findViewById(R.id.judul_kolom_2);
         this.fotoBangunan = (ImageView)this._labelView.findViewById(R.id.foto_bangunan);
 
-        slsTv.setText(keterangan.get(4));
+        slsTv.setText(keterangan.get(2));
         fisikTv.setText(keterangan.get(3));
-        sensusTv.setText(keterangan.get(2));
+        sensusTv.setText(keterangan.get(4));
 
         judulKolom1.setText(key.get(1));
         judulKolom2.setText(key.get(2));

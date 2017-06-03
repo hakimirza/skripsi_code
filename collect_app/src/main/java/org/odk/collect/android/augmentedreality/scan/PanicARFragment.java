@@ -278,9 +278,9 @@ public class PanicARFragment extends PARFragment {
             parameter.add(bangunan.getPathFoto());
             parameter.add(bangunan.getJarak());
 
+            parameter.add(bangunan.getHashMap().get(key.get(0)));
             parameter.add(bangunan.getHashMap().get(key.get(1)));
             parameter.add(bangunan.getHashMap().get(key.get(2)));
-            parameter.add(bangunan.getHashMap().get(key.get(3)));
 
 //            for (int i=0; i<bangunan.getKeteranganBangunan().size();i++){
 //                parameter.add(bangunan.getKeteranganBangunan().get(i));
