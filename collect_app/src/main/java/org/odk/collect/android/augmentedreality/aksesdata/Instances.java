@@ -1,4 +1,4 @@
-package org.odk.collect.android.aksesdata;
+package org.odk.collect.android.augmentedreality.aksesdata;
 
 /**
  * Created by Septiawan Aji Pradan on 5/28/2017.

@@ -14,6 +14,7 @@ public class Bangunan {
     private String pathFoto;
     private String jarak;
     private ArrayList<String> keteranganBangunan;
+    private HashMap<String,String> hashMap;
 
     public Bangunan(){
 
@@ -72,5 +73,13 @@ public class Bangunan {
 
     public void setJarak(String jarak) {
         this.jarak = jarak;
+    }
+
+    public HashMap<String, String> getHashMap() {
+        return hashMap;
+    }
+
+    public void setHashMap(HashMap<String, String> hashMap) {
+        this.hashMap = hashMap;
     }
 }

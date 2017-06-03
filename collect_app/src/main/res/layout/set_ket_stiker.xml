@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:background="@color/white"
+    >
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,6 +17,7 @@
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
         android:layout_below="@id/tv_atur_ket_stiker"
         android:id="@+id/relativeLayout">
         <RelativeLayout
@@ -26,7 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/foto_bangunan"
-                android:padding="4dp"/>
+                android:src="@drawable/img_rumah"
+                android:scaleType="centerCrop"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -44,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:singleLine="true"
                     android:textColor="@color/white"
-                    android:id="@+id/tv_ket_sls"
+                    android:id="@+id/tv_atas"
                     android:gravity="center"/>
             </RelativeLayout>
             <LinearLayout
@@ -68,8 +72,8 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:gravity="center"
-                        android:text="Fisik"
                         android:textColor="@color/white"
+                        android:singleLine="true"
                         android:textSize="12dp"
                         android:layout_marginTop="1.5dp"/>
                     <TextView
@@ -80,7 +84,7 @@
                         android:layout_centerVertical="true"
                         android:gravity="center"
                         android:singleLine="true"
-                        android:id="@+id/tv_fisik"
+                        android:id="@+id/tv_kolom_1"
                         android:textColor="@color/white"
                         android:textSize="15dp" />
                 </RelativeLayout>
@@ -99,7 +103,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:gravity="center"
-                        android:text="Sensus"
+                        android:singleLine="true"
                         android:textSize="12dp"
                         android:textColor="@color/white"
                         android:layout_marginTop="1.5dp"/>
@@ -110,7 +114,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:gravity="center"
-                        android:id="@+id/tv_sensus"
+                        android:id="@+id/tv_kolom_2"
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="15dp" />
@@ -130,7 +134,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:gravity="center"
-                        android:text="Jarak"
+                        android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="12dp"
                         android:layout_marginTop="1.5dp"/>
@@ -144,13 +148,17 @@
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="15dp"
-                        android:id="@+id/tv_jarak"/>
+                        android:id="@+id/tv_kolom_3"/>
                 </RelativeLayout>
-
             </LinearLayout>
         </RelativeLayout>
-
     </RelativeLayout>
-
-
+    <Button
+        android:layout_below="@id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Simpan"
+        android:textSize="13dp"
+        android:id="@+id/save_has"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

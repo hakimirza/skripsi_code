@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -25,25 +26,19 @@ import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ListFormForDownload;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.aksesdata.AksesDataOdk;
-import org.odk.collect.android.aksesdata.Form;
-import org.odk.collect.android.aksesdata.Instances;
-import org.odk.collect.android.aksesdata.ParsingForm;
+import org.odk.collect.android.augmentedreality.aksesdata.AksesDataOdk;
+import org.odk.collect.android.augmentedreality.aksesdata.ParsingForm;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.augmentedreality.DatabaseHandler;
-import org.odk.collect.android.augmentedreality.formisian.BangunanSensusOnMaps;
 import org.odk.collect.android.augmentedreality.formisian.SetLocationActivity;
 import org.odk.collect.android.augmentedreality.scan.ARPortraitActivity;
-import org.odk.collect.android.augmentedreality.scan.PanicARFragment;
-import org.odk.collect.android.dao.InstancesDao;
+import org.odk.collect.android.augmentedreality.scan.AturStikerDialog;
 import org.odk.collect.android.downloadinstance.Download;
 import org.odk.collect.android.downloadinstance.DownloadInstances;
 import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
-import org.odk.collect.android.koneksi.AlamatServer;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.augmentedreality.koneksi.AlamatServer;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MainActivity extends Activity implements View.OnClickListener,DownloadPcl {
@@ -55,6 +50,13 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
     private ListFormForDownload listFormForDownload;
     private static final Object bb= new Object();
     private int def;
+    AksesDataOdk aksesDataOdk;
+    ArrayList<String> pilihanForm ;
+    private String pathForm;
+    String idForm;
+    private HashMap<String,String> keyForStriker;
+    AturStikerDialog aturStikerDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,13 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
 
         listFormForDownload = new ListFormForDownload();
         scanTempat.setOnClickListener(this);
-        inputData.setOnClickListener(this);
+        inputData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pilihForm();
+            }
+        });
+
         lihatPeta.setOnClickListener(this);
         downnload.setOnClickListener(this);
     }
@@ -88,28 +96,45 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
 //                Permission.requestCameraPermission(this);
 //            }
 
-        }else if(view==inputData){
-//            if(Permission.cekLocationPermission(this)){
-                intent = new Intent(this, SetLocationActivity.class);
-                startActivity(intent);
-//            }else{
-//                Permission.requestLocationPermission(this);
-//            }
+        }
+//        else if(view==inputData){
+////            if(Permission.cekLocationPermission(this)){
+////                intent = new Intent(this, SetLocationActivity.class);
+////                startActivity(intent);
+////            }else{
+////                Permission.requestLocationPermission(this);
+////            }
+//            pilihForm();
+//            keyForStriker
+//
+//        }
 
-        }else if (view==lihatPeta){
-            if(databaseHandler.getAll().isEmpty()){
-                Toast.makeText(this, "Belum Ada Data", Toast.LENGTH_SHORT).show();
-            }else{
-//                intent = new Intent(this, BangunanSensusOnMaps.class);
-                ParsingForm parsingForm = new ParsingForm();
-                AksesDataOdk aksesDataOdk = new AksesDataOdk();
-                for (int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
-                    Log.d("bismillah",parsingForm.getVariabelForm(aksesDataOdk.getKeteranganForm().get(i).getPathForm()).toString());
-                }
+        else if (view==lihatPeta){
+//            if(databaseHandler.getAll().isEmpty()){
+//                Toast.makeText(this, "Belum Ada Data", Toast.LENGTH_SHORT).show();
+//            }else{
+////                intent = new Intent(this, BangunanSensusOnMaps.class);
+//                ParsingForm parsingForm = new ParsingForm();
+//                AksesDataOdk aksesDataOdk = new AksesDataOdk();
+//                for (int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
+//                    Log.d("bismillah",parsingForm.getVariabelForm(aksesDataOdk.getKeteranganForm().get(i).getPathForm()).toString());
+//                }
+
 
 //                intent = new Intent(this, ParsingForm.class);
 //                startActivity(intent);
-            }
+//            }
+//            aturStikerDialog.setDialogResult(new AturStikerDialog.OnMyDialogResult() {
+//                @Override
+//                public void finish(HashMap hasmap) {
+//                    Toast.makeText(MainActivity.this, "tooooo", Toast.LENGTH_SHORT).show();
+//                    keyForStriker = hasmap;
+//                    Log.d("alhamdulillah___",keyForStriker.toString());
+//                }
+//            });
+
+            Log.d("ajiiiiii",databaseHandler.getAll(idForm).toString());
+            Toast.makeText(getApplicationContext(),databaseHandler.getAll(idForm).toString() , Toast.LENGTH_SHORT).show();
         }else if(view==downnload){
             downloadInstancesFromServer();
         }
@@ -193,6 +218,60 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
         });
 
         Collect.getInstance2().addToRequestQueue(downloadFromServer);
+    }
+
+    public void pilihForm(){
+        aksesDataOdk = new AksesDataOdk();
+        String[] pilihan = new String[aksesDataOdk.getKeteranganForm().size()];
+        for (int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
+            pilihan[i] = aksesDataOdk.getKeteranganForm().get(i).getDisplayName();
+        }
+
+        def = 0;
+
+        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Pilih Kuesioner")
+                .setSingleChoiceItems(pilihan, 0,  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        def = which;
+                    }
+                })
+                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setPathForm(def);
+                        setIdForm(def);
+                        idForm = getIdForm();
+                        aturStikerDialog = new AturStikerDialog(MainActivity.this,getPathForm(),getIdForm());
+                        aturStikerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        aturStikerDialog.show();
+
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        dialog.show();
+    }
+
+    public void setPathForm(int def){
+        pathForm = aksesDataOdk.getKeteranganForm().get(def).getPathForm();
+    }
+
+    public String getPathForm(){
+        return pathForm;
+    }
+
+    public void setIdForm(int def){
+        idForm = aksesDataOdk.getKeteranganForm().get(def).getIdForm();
+    }
+
+    public String getIdForm(){
+        return idForm;
     }
 
 

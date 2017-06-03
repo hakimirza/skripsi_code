@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/foto_bangunan"
-            android:padding="4dp"/>
+            android:scaleType="centerCrop"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,21 +46,20 @@
                 android:layout_marginLeft="0.75dp"
                 android:layout_marginRight="0.75dp">
                 <TextView
-                    android:id="@+id/judul_fisik"
+                    android:id="@+id/judul_kolom_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
-                    android:text="Fisik"
                     android:textColor="@color/white"
                     android:textSize="8dp"
                     android:layout_marginTop="1.5dp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/judul_fisik"
+                    android:layout_below="@id/judul_kolom_1"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
@@ -76,21 +75,20 @@
                 android:layout_marginRight="0.75dp"
                 android:background="@color/black_transparent">
                 <TextView
-                    android:id="@+id/judul_sensus"
+                    android:id="@+id/judul_kolom_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
-                    android:text="Sensus"
                     android:textSize="8dp"
                     android:textColor="@color/white"
                     android:layout_marginTop="1.5dp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/judul_sensus"
+                    android:layout_below="@id/judul_kolom_2"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"

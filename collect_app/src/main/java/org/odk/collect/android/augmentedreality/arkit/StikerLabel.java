@@ -31,9 +31,11 @@ public class StikerLabel extends PARPoi {
     private TextView fisikTv;
     private TextView sensusTv;
     private TextView jarakTv;
+    private TextView judulKolom1,judulKolom2;
     private ImageView fotoBangunan;
     private int layoutId;
     private ArrayList<String> keterangan;
+    private ArrayList<String> key;
     protected static Point defaultSize = new Point(220, 60);
     private View.OnClickListener onClickListener;
     protected Point size = null;
@@ -48,13 +50,14 @@ public class StikerLabel extends PARPoi {
 
     }
 
-    public StikerLabel(Location location, ArrayList<String> keterangan, int layoutId, int radarResourceId){
+    public StikerLabel(ArrayList<String> key,Location location, ArrayList<String> keterangan, int layoutId, int radarResourceId){
         super(location);
         Log.d("aji_keterangan",keterangan.toString());
         this.keterangan = keterangan;
         this.layoutId = layoutId;
         this.radarResourceId = radarResourceId;
         this.offset.set(0,0);
+        this.key  = key;
     }
 
     public StikerLabel(Location location){
@@ -114,11 +117,16 @@ public class StikerLabel extends PARPoi {
         this.fisikTv = (TextView)this._labelView.findViewById(R.id.tv_fisik);
         this.sensusTv = (TextView)this._labelView.findViewById(R.id.tv_sensus);
         this.jarakTv = (TextView)this._labelView.findViewById(R.id.tv_jarak);
+        this.judulKolom1 = (TextView)this._labelView.findViewById(R.id.judul_kolom_1);
+        this.judulKolom2 = (TextView)this._labelView.findViewById(R.id.judul_kolom_2);
         this.fotoBangunan = (ImageView)this._labelView.findViewById(R.id.foto_bangunan);
 
         slsTv.setText(keterangan.get(4));
         fisikTv.setText(keterangan.get(3));
         sensusTv.setText(keterangan.get(2));
+
+        judulKolom1.setText(key.get(1));
+        judulKolom2.setText(key.get(2));
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;

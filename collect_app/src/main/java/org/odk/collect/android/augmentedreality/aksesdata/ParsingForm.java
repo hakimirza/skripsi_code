@@ -1,4 +1,4 @@
-package org.odk.collect.android.aksesdata;
+package org.odk.collect.android.augmentedreality.aksesdata;
 
 
 import org.w3c.dom.Document;

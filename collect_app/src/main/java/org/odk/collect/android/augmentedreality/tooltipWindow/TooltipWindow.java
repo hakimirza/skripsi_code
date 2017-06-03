@@ -1,4 +1,4 @@
-package org.odk.collect.android.augmentedreality.TooltipWindow;
+package org.odk.collect.android.augmentedreality.tooltipWindow;
 
 import android.app.ActionBar;
 import android.content.Context;

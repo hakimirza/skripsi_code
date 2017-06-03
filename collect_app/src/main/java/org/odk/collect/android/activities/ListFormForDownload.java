@@ -14,22 +14,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.downloadinstance.Download;
-import org.odk.collect.android.downloadinstance.DownloadInstances;
 import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
-import org.odk.collect.android.koneksi.AlamatServer;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;

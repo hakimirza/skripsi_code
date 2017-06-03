@@ -1,4 +1,4 @@
-package org.odk.collect.android.koneksi;
+package org.odk.collect.android.augmentedreality.koneksi;
 
 /**
  * Created by Septiawan Aji Pradan on 5/28/2017.
