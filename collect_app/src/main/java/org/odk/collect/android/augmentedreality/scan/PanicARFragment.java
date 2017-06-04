@@ -16,7 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.ButtonEnum;
+import com.nightonke.boommenu.Piece.PiecePlaceEnum;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.augmentedreality.MainActivity;
 import org.odk.collect.android.augmentedreality.aksesdata.AksesDataOdk;
 import org.odk.collect.android.augmentedreality.aksesdata.Instances;
 import org.odk.collect.android.augmentedreality.aksesdata.ParsingForm;
@@ -30,6 +38,7 @@ import org.odk.collect.android.augmentedreality.arkit.PARPoiLabelAdvanced;
 import org.odk.collect.android.augmentedreality.arkit.StikerLabel;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceAttitude;
 import org.odk.collect.android.augmentedreality.sensorkit.enums.PSKDeviceOrientation;
+import org.odk.collect.android.augmentedreality.ui.BuilderManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,8 +53,6 @@ public class PanicARFragment extends PARFragment {
 
     private static ArrayList<PARPoiLabel> labelRepo = new ArrayList<PARPoiLabel>();
 
-    private ArrayList<Bangunan> bangunanSensusArrayList;
-    private ArrayList<String> keyFromFrom;
     private ArrayList<Instances> getInstancesByIdForm;
 
     private ParsingInstances parsingInstances;
@@ -56,6 +63,8 @@ public class PanicARFragment extends PARFragment {
     private String pathForm;
     private String idForm;
     AturStikerDialog aturStikerDialog;
+    BoomMenuButton bmb;
+
     DatabaseHandler databaseHandler;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,17 +73,16 @@ public class PanicARFragment extends PARFragment {
 
         // add content using helper methods defined below
         // example to add costume drawable
-        databaseHandler = new DatabaseHandler(getActivity());
 //        bangunanSensusArrayList = databaseHandler.getAll();
-        keyFromFrom = new ArrayList<>();
         getInstancesByIdForm = new ArrayList<>();
         parsingForm = new ParsingForm();
-        databaseHandler = new DatabaseHandler(getActivity());
 
         aksesDataOdk = new AksesDataOdk();
         parsingInstances = new ParsingInstances();
         pilihanForm = new ArrayList<>();
+        databaseHandler = new DatabaseHandler(getActivity());
         pilihForm();
+
     }
 
     @Override
@@ -82,7 +90,63 @@ public class PanicARFragment extends PARFragment {
         // FIRST: setup default resource IDs
         // IMPORTANT: call before super.onCreate()
         this.viewLayoutId = R.layout.panicar_view;
+
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        //menu pada saat scan
+        bmb = (BoomMenuButton)view.findViewById(R.id.bmb_scan);
+        assert bmb != null;
+        bmb.setButtonEnum(ButtonEnum.TextInsideCircle);
+        bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_1);
+        bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_4_2);
+
+        //set circle menu
+        final TextInsideCircleButton.Builder aturStiker = new TextInsideCircleButton.Builder()
+                .normalImageRes(R.drawable.dolphin)
+                .normalText("Atur Stiker")
+                .normalTextColor(Color.WHITE)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        aturStiker(getPathForm(),getIdForm());
+                    }
+                });
+        TextInsideCircleButton.Builder hilangkanRadar = new TextInsideCircleButton.Builder()
+                .normalImageRes(R.drawable.eagle)
+                .normalText("Hilangkan Radar")
+                .normalTextColor(Color.WHITE)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        Toast.makeText(getActivity(), "Radar Hilang", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        TextInsideCircleButton.Builder syncDataServer = new TextInsideCircleButton.Builder()
+                .normalImageRes(R.drawable.elephant)
+                .normalText("Sync Data Server")
+                .normalTextColor(Color.WHITE)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        Toast.makeText(getActivity(), "Sync Data Server ...", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        TextInsideCircleButton.Builder gantiKuesioner = new TextInsideCircleButton.Builder()
+                .normalImageRes(R.drawable.horse)
+                .normalText("Pilih Kuesioner")
+                .normalTextColor(Color.WHITE)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        pilihForm();
+                    }
+                });
+        bmb.addBuilder(aturStiker);
+        bmb.addBuilder(hilangkanRadar);
+        bmb.addBuilder(syncDataServer);
+        bmb.addBuilder(gantiKuesioner);
+
+
         getRadarView().setRadarRange(500);
         return view;
     }
@@ -221,10 +285,9 @@ public class PanicARFragment extends PARFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         setPathForm(def);
                         setIdForm(def);
-//                        aturStikerDialog = new AturStikerDialog(getActivity(),getPathForm());
-//                        aturStikerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                        aturStikerDialog.show();
-                        setAr(def);
+                        Log.d("wulan_d",getPathForm()+" "+getIdForm());
+//                        setAr(getPathForm(),getIdForm());
+                        cekStiker(getPathForm(),getIdForm());
                     }
                 })
                 .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -252,42 +315,66 @@ public class PanicARFragment extends PARFragment {
         return idForm;
     }
 
-    public void setAr(int which){
-        ArrayList<String> key = databaseHandler.getAll(getIdForm());
-        ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
-        getInstancesByIdForm = aksesDataOdk.getKeteranganInstancesbyIdForm(aksesDataOdk.getKeteranganForm().get(which).getIdForm());
-        keyFromFrom = parsingForm.getVariabelForm(aksesDataOdk.getKeteranganForm().get(which).getPathForm());
-        key.add("foto_bangunan");
-        key.add("location");
-        Log.d("cinta",key.toString());
-        for (Instances instances : getInstancesByIdForm){
-            try{
-                bangunanArrayList.add(parsingInstances.getValueHasMap(instances.getPathInstances(),key));
-                Log.d("cinta_size",""+bangunanArrayList.size());
-            }catch (Exception e){
-
-            }
+    public void cekStiker(String pathForm,String idForm){
+        if(databaseHandler.getAll(idForm).isEmpty()){
+            Log.d("wulan_d_2","sini");
+            aturStiker(pathForm,idForm);
+            setAr(pathForm,idForm);
+        }else{
+            setAr(pathForm,idForm);
         }
-        for (Bangunan bangunan : bangunanArrayList){
-            Log.d("Cinta",bangunan.getHashMap().toString());
-            ArrayList<String> parameter = new ArrayList<>();
-            Location location = new Location("location");
-            location.setLatitude(bangunan.getLat());
-            location.setLongitude(bangunan.getLon());
+    }
+    public void setAr(String pathForm,String idForm){
+//        Log.d("wulan_d_1",databaseHandler.getAll(idForm).toString());
+//        if(databaseHandler.getAll(idForm).isEmpty()){
+//            Log.d("wulan_d_2","sini");
+//            aturStiker(pathForm,idForm);
+//        }else{
+//            Log.d("wulan_d_3","sini");
+            ArrayList<String> key = databaseHandler.getAll(idForm);
+            ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
+            getInstancesByIdForm = aksesDataOdk.getKeteranganInstancesbyIdForm(idForm);
+            key.add("foto_bangunan");
+            key.add("location");
+            Log.d("cinta",key.toString());
+            for (Instances instances : getInstancesByIdForm){
+                try{
+                    bangunanArrayList.add(parsingInstances.getValueHasMap(instances.getPathInstances(),key));
+                    Log.d("cinta_size",""+bangunanArrayList.size());
+                }catch (Exception e){
 
-            parameter.add(bangunan.getPathFoto());
-            parameter.add(bangunan.getJarak());
+                }
+            }
+            for (Bangunan bangunan : bangunanArrayList){
+                Log.d("Cinta",bangunan.getHashMap().toString());
+                ArrayList<String> parameter = new ArrayList<>();
+                Location location = new Location("location");
+                location.setLatitude(bangunan.getLat());
+                location.setLongitude(bangunan.getLon());
 
-            parameter.add(bangunan.getHashMap().get(key.get(0)));
-            parameter.add(bangunan.getHashMap().get(key.get(1)));
-            parameter.add(bangunan.getHashMap().get(key.get(2)));
+                parameter.add(bangunan.getPathFoto());
+                parameter.add(bangunan.getJarak());
+
+                parameter.add(bangunan.getHashMap().get(key.get(0)));
+                parameter.add(bangunan.getHashMap().get(key.get(1)));
+                parameter.add(bangunan.getHashMap().get(key.get(2)));
 
 //            for (int i=0; i<bangunan.getKeteranganBangunan().size();i++){
 //                parameter.add(bangunan.getKeteranganBangunan().get(i));
 //            }
-            Log.d("wulan_8",parameter.toString());
+                Log.d("wulan_8",parameter.toString());
 
-            PARController.getInstance().addPoi( createStiker(parameter,location,key));
-        }
+                PARController.getInstance().addPoi( createStiker(parameter,location,key));
+            }
+//        }
+
     }
+
+    public void aturStiker(String pathForm, String idForm){
+        aturStikerDialog = new AturStikerDialog(getActivity(),pathForm,idForm);
+        aturStikerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        aturStikerDialog.show();
+//        setAr(pathForm,idForm);
+    }
+
 }

@@ -174,6 +174,10 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:cardview-v7:25.0.+'
     compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.nightonke:boommenu:2.1.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.android.support:recyclerview-v7:25.1.1'
+    compile 'com.android.support:cardview-v7:25.1.1'
 
     //landing page
     compile 'com.github.apl-devs:appintro:v4.2.0'

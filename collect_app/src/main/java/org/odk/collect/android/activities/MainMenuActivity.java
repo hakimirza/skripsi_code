@@ -46,6 +46,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.augmentedreality.MainActivity;
+import org.odk.collect.android.augmentedreality.ui.MainMenuApp;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
 import org.odk.collect.android.downloadinstance.Download;
@@ -167,14 +168,12 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
         mViewSentFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Collect.getInstance().getActivityLogger().logAction(this,
-//                        ApplicationConstants.FormModes.VIEW_SENT, "click");
-//                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
-//                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
-//                        ApplicationConstants.FormModes.VIEW_SENT);
-//                startActivity(i);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                Collect.getInstance().getActivityLogger().logAction(this,
+                        ApplicationConstants.FormModes.VIEW_SENT, "click");
+                Intent i = new Intent(getApplicationContext(), InstanceChooserList.class);
+                i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.VIEW_SENT);
+                startActivity(i);
             }
         });
 
@@ -488,7 +487,7 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 }
                 return true;
             case MENU_AR :
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(),MainMenuApp.class);
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

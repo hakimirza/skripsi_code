@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.aksesdata.ParsingForm;
+import org.odk.collect.android.augmentedreality.arkit.PARController;
 import org.odk.collect.android.augmentedreality.tooltipWindow.TooltipWindow;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.w3c.dom.Text;
@@ -95,6 +96,8 @@ public class AturStikerDialog extends Dialog{
                     Toast.makeText(activity, "Ada yang belum di isi", Toast.LENGTH_SHORT).show();
                 }else{
                     db.insertTabel(idForm,getHasMap().get(TEXTVIEW_ATAS),getHasMap().get(TEXTVIEW_1),getHasMap().get(TEXTVIEW_2),getHasMap().get(TEXTVIEW_3));
+//                    PanicARFragment pf = new PanicARFragment();
+//                    pf.setAr(pathForm,idForm);
                     dismiss();
                 }
 
@@ -176,7 +179,6 @@ public class AturStikerDialog extends Dialog{
 
     public void setHasmap(String key,String value){
         keyForParse.put(key,value);
-
     }
 
     public HashMap<String,String> getHasMap(){

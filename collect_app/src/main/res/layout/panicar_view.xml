@@ -26,7 +26,15 @@
         android:id="@+id/arRadarView"
         android:tag="arRadarView"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentLeft="true" />
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="fill_parent"

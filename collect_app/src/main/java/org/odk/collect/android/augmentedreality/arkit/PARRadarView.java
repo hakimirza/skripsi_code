@@ -83,8 +83,10 @@ extends RelativeLayout {
         int height = ((ViewGroup)this.getParent()).getMeasuredHeight();
         MarginLayoutParams params = (MarginLayoutParams)this.getLayoutParams();
         if (this.radarMode == 1) {
-            int size = (int)TypedValue.applyDimension((int)1, (float)256.0f, (DisplayMetrics)this.getResources().getDisplayMetrics());
-            int x = width - size - params.rightMargin;
+            int size = (int)TypedValue.applyDimension((int)1, (float)150.0f, (DisplayMetrics)this.getResources().getDisplayMetrics());
+//            int x = width - size - params.rightMargin;
+//            int y = height - size - params.bottomMargin;
+            int x = params.leftMargin;
             int y = height - size - params.bottomMargin;
             this.setX((float)x);
             this.setY((float)y);

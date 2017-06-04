@@ -32,6 +32,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.augmentedreality.formisian.SetLocationActivity;
 import org.odk.collect.android.augmentedreality.scan.ARPortraitActivity;
 import org.odk.collect.android.augmentedreality.scan.AturStikerDialog;
+import org.odk.collect.android.augmentedreality.ui.MainMenuApp;
 import org.odk.collect.android.downloadinstance.Download;
 import org.odk.collect.android.downloadinstance.DownloadInstances;
 import org.odk.collect.android.downloadinstance.listener.DownloadPcl;
@@ -133,8 +134,10 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
 //                }
 //            });
 
-            Log.d("ajiiiiii",databaseHandler.getAll(idForm).toString());
-            Toast.makeText(getApplicationContext(),databaseHandler.getAll(idForm).toString() , Toast.LENGTH_SHORT).show();
+//            Log.d("ajiiiiii",databaseHandler.getAll(idForm).toString());
+//            Toast.makeText(getApplicationContext(),databaseHandler.getAll(idForm).toString() , Toast.LENGTH_SHORT).show();
+            Intent intent1 = new Intent(getApplicationContext(), MainMenuApp.class);
+            startActivity(intent1);
         }else if(view==downnload){
             downloadInstancesFromServer();
         }

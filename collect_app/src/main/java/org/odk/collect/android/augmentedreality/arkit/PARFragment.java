@@ -63,13 +63,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.ButtonEnum;
+import com.nightonke.boommenu.Piece.PiecePlaceEnum;
+
 import org.apache.http.message.BasicNameValuePair;
+import org.odk.collect.android.R;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceAttitude;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceProperties;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKEventListener;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKMath;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKSensorManager;
 import org.odk.collect.android.augmentedreality.sensorkit.enums.PSKDeviceOrientation;
+import org.odk.collect.android.augmentedreality.ui.BuilderManager;
 
 import java.net.URLEncoder;
 import java.util.ListIterator;
@@ -80,7 +87,7 @@ implements PSKEventListener {
     private final float RENDER_PLANE_NEAR = 0.25f;
     private final float RENDER_PLANE_FAR = 10000.0f;
     private final int RENDER_INTERVAL = (int)Math.ceil(33.333335876464844);
-    private final String WATERMARK_TEXT = "Skripsi";
+    private final String WATERMARK_TEXT = "";
     protected static PARFragment activeFragment;
     private RelativeLayout _mainView;
     protected PARCameraView _cameraView;
@@ -119,6 +126,7 @@ implements PSKEventListener {
     protected boolean hasGPSDialog = false;
     protected AlertDialog gpsDialog = null;
 
+    private BoomMenuButton bmb;
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         this._deviceAttitude = PSKDeviceAttitude.sharedDeviceAttitude();
@@ -149,7 +157,11 @@ implements PSKEventListener {
             this._debugTextView.setVisibility(View.GONE);
         }
         this._arRadarView = (PARRadarView)this._mainView.findViewWithTag((Object)"arRadarView");
+
         return view;
+
+
+
     }
 
     public void onResume() {
@@ -368,8 +380,8 @@ implements PSKEventListener {
             this._arView.addView((View)this._watermark);
         }
         this._watermark.setVisibility(View.VISIBLE);
-        if (this._watermark.getText() != "Skripsi") {
-            this._watermark.setText((CharSequence)"Skripsi");
+        if (this._watermark.getText() != "") {
+            this._watermark.setText((CharSequence)"");
         }
     }
 
@@ -475,7 +487,7 @@ implements PSKEventListener {
         this._needsWaterMark = true;
         try {
             this._watermark = new TextView(this._arView.getContext());
-            this._watermark.setText((CharSequence)"Skripsi");
+            this._watermark.setText((CharSequence)"");//skripsi
             this._watermark.setLayoutParams((ViewGroup.LayoutParams)new RelativeLayout.LayoutParams(-1, -1));
             this._watermark.setTextSize(2, 40.0f);
             this._watermark.setBackgroundColor(0);
