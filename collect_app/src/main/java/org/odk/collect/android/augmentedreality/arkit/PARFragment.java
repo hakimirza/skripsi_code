@@ -59,6 +59,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -126,6 +128,9 @@ implements PSKEventListener {
     protected boolean hasGPSDialog = false;
     protected AlertDialog gpsDialog = null;
 
+    private ImageView caution,cancel;
+    private RelativeLayout keterangan;
+
     private BoomMenuButton bmb;
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -135,13 +140,16 @@ implements PSKEventListener {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(this.viewLayoutId, container, false);
-        this._mainView = (RelativeLayout)view.findViewWithTag((Object)"arMainLayout");
+        this._mainView = (RelativeLayout) view.findViewWithTag((Object)"arMainLayout");
         this._cameraView = (PARCameraView)this._mainView.findViewWithTag((Object)"arCameraView");
         this._cameraView.onCreateView();
         this._arView = (PARView)this._mainView.findViewWithTag((Object)"arContentView");
         this._arView.setVisibility(View.GONE);
         this.setARViewShouldBeVisible(true);
         this.orientationHidesARView = false;
+//        this.caution = (ImageView)view.findViewById(R.id.tombol_caution);
+//        this.cancel = (ImageView)view.findViewById(R.id.tombol_cancel);
+//        this.keterangan = (RelativeLayout)view.findViewById(R.id.rl_keterangan_form);
         if (!PARController.getInstance().hasValidApiKey()) {
             this.createWatermark();
         }
@@ -159,8 +167,6 @@ implements PSKEventListener {
         this._arRadarView = (PARRadarView)this._mainView.findViewWithTag((Object)"arRadarView");
 
         return view;
-
-
 
     }
 

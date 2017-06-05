@@ -1,4 +1,4 @@
-package org.odk.collect.android.landingpage;
+package org.odk.collect.android.augmentedreality.landingpage;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;

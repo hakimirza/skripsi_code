@@ -269,7 +269,8 @@ the specific language governing permissions and limitations under the License.
             android:name=".augmentedreality.scan.ARPortraitActivity"
             android:label="Portrait-only AR"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
         <activity
             android:name=".augmentedreality.scan.ARAutoOrientingActivity"
@@ -279,11 +280,13 @@ the specific language governing permissions and limitations under the License.
         </activity>
         <activity android:name=".augmentedreality.formisian.SetLocationActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".landingpage.LandingPageActivity"
+        <activity android:name=".augmentedreality.landingpage.LandingPageActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name=".augmentedreality.ui.MainMenuApp"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
 
+        <activity android:name=".augmentedreality.scan.AturStikerActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
 
         <service
             android:name=".augmentedreality.formisian.FetchAddressIntentService"

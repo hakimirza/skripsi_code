@@ -46,6 +46,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.augmentedreality.MainActivity;
+import org.odk.collect.android.augmentedreality.landingpage.LandingPageActivity;
 import org.odk.collect.android.augmentedreality.ui.MainMenuApp;
 import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.database.ItemsetDbAdapter;
@@ -487,7 +488,7 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 }
                 return true;
             case MENU_AR :
-                Intent intent = new Intent(getApplicationContext(),MainMenuApp.class);
+                Intent intent = new Intent(getApplicationContext(),LandingPageActivity.class);
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

@@ -153,12 +153,23 @@
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
-    <Button
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="40dp"
         android:layout_below="@id/relativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Simpan"
-        android:textSize="13dp"
-        android:id="@+id/save_has"
-        android:layout_centerHorizontal="true"/>
+        android:id="@+id/rl_simpan_form"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ico_rounded">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Simpan"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:padding="5dp"/>
+    </RelativeLayout>
+
 </RelativeLayout>

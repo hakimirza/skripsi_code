@@ -2,8 +2,8 @@ package org.odk.collect.android.augmentedreality.scan;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,22 +16,17 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.aksesdata.ParsingForm;
-import org.odk.collect.android.augmentedreality.arkit.PARController;
 import org.odk.collect.android.augmentedreality.tooltipWindow.TooltipWindow;
-import org.odk.collect.android.utilities.ToastUtils;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by Septiawan Aji Pradan on 6/2/2017.
+ * Created by Septiawan Aji Pradan on 6/5/2017.
  */
 
-public class AturStikerDialog extends Dialog{
-
-    private Activity activity;
-    private String pathForm;
+public class AturStikerActivity extends AppCompatActivity {
+        private String pathForm;
     private String idForm;
     private HashMap<String,String> keyForParse;
     private RelativeLayout saveHas;
@@ -41,7 +36,6 @@ public class AturStikerDialog extends Dialog{
     public static final String TEXTVIEW_3 = "textview_3";
     private RelativeLayout rl_1,rl_2,rl_3,rl_ket_sls;
     private TextView tv_1,tv_2,tv_3,tv_atas;
-    TooltipWindow tooltipWindow;
     private ParsingForm parsingForm;
     int def;
 
@@ -50,12 +44,7 @@ public class AturStikerDialog extends Dialog{
 
     DatabaseHandler db;
 
-   public AturStikerDialog(Activity activity,String pathForm,String idForm){
-        super(activity);
-        this.activity = activity;
-        this.pathForm = pathForm;
-        this.idForm = idForm;
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +52,8 @@ public class AturStikerDialog extends Dialog{
         setContentView(R.layout.set_ket_stiker);
         declaration();
 
+        pathForm = getIntent().getStringExtra("path_form");
+        idForm = getIntent().getStringExtra("id_form");
         rl_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,14 +82,17 @@ public class AturStikerDialog extends Dialog{
         saveHas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               getHasMap();
+                Log.d("bismillah","click");
+                getHasMap();
                 if(getHasMap().size()!=4){
-                    Toast.makeText(activity, "Ada yang belum di isi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Ada yang belum di isi", Toast.LENGTH_SHORT).show();
                 }else{
                     db.insertTabel(idForm,getHasMap().get(TEXTVIEW_ATAS),getHasMap().get(TEXTVIEW_1),getHasMap().get(TEXTVIEW_2),getHasMap().get(TEXTVIEW_3));
-//                    PanicARFragment pf = new PanicARFragment();
-//                    pf.setAr(pathForm,idForm);
-                    dismiss();
+                    Intent intent = new Intent(getApplicationContext(),ARPortraitActivity.class);
+                    intent.putExtra("id_form",idForm);
+                    intent.putExtra("path_form",pathForm);
+                    startActivity(intent);
+                    finish();
                 }
 
             }
@@ -116,11 +110,10 @@ public class AturStikerDialog extends Dialog{
         tv_atas = (TextView)findViewById(R.id.tv_atas);
         saveHas = (RelativeLayout) findViewById(R.id.rl_simpan_form);
 
-        tooltipWindow = new TooltipWindow(activity);
         parsingForm = new ParsingForm();
         kec = new ArrayList<>();
         keyForParse = new HashMap<>();
-        db = new DatabaseHandler(activity.getApplicationContext());
+        db = new DatabaseHandler(getApplicationContext());
     }
 
     public ArrayList<String> getKeyForm (){
@@ -145,36 +138,31 @@ public class AturStikerDialog extends Dialog{
             variabel[i] = var.get(i);
         }
 
-            def = 0;
-            AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setTitle("Atur Variabel")
-                    .setSingleChoiceItems(variabel, 0,  new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            def = which;
-                        }
-                    })
-                    .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-//                            if(!tooltipWindow.isTooltipShown()) {
-//                                tooltipWindow.showToolTip(v);
-//                            }else{
-//                                tooltipWindow.dismissTooltip();
-//                            }
-                            pilihan = variabel[def];
-                            tv.setText(pilihan);
-                            setHasmap(key,pilihan);
+        def = 0;
+        AlertDialog dialog = new AlertDialog.Builder(AturStikerActivity.this)
+                .setTitle("Atur Variabel")
+                .setSingleChoiceItems(variabel, 0,  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        def = which;
+                    }
+                })
+                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        pilihan = variabel[def];
+                        tv.setText(pilihan);
+                        setHasmap(key,pilihan);
 
-                        }
-                    })
-                    .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    }).create();
-            dialog.show();
+                    }
+                }).create();
+        dialog.show();
     }
 
     public void setHasmap(String key,String value){

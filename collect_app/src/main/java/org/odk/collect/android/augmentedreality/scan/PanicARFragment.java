@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
@@ -35,6 +37,7 @@ import org.odk.collect.android.augmentedreality.arkit.PARController;
 import org.odk.collect.android.augmentedreality.arkit.PARFragment;
 import org.odk.collect.android.augmentedreality.arkit.PARPoiLabel;
 import org.odk.collect.android.augmentedreality.arkit.PARPoiLabelAdvanced;
+import org.odk.collect.android.augmentedreality.arkit.PARRadarView;
 import org.odk.collect.android.augmentedreality.arkit.StikerLabel;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceAttitude;
 import org.odk.collect.android.augmentedreality.sensorkit.enums.PSKDeviceOrientation;
@@ -56,6 +59,9 @@ public class PanicARFragment extends PARFragment {
     private ArrayList<Instances> getInstancesByIdForm;
 
     private ParsingInstances parsingInstances;
+    private ImageView caution,cancel;
+    private RelativeLayout keterangan;
+
     int def;
     private ParsingForm parsingForm;
     AksesDataOdk aksesDataOdk;
@@ -65,7 +71,9 @@ public class PanicARFragment extends PARFragment {
     AturStikerDialog aturStikerDialog;
     BoomMenuButton bmb;
 
+    PARRadarView radarView;
     DatabaseHandler databaseHandler;
+    int muncul;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +82,7 @@ public class PanicARFragment extends PARFragment {
         // add content using helper methods defined below
         // example to add costume drawable
 //        bangunanSensusArrayList = databaseHandler.getAll();
+        muncul = 1;
         getInstancesByIdForm = new ArrayList<>();
         parsingForm = new ParsingForm();
 
@@ -81,7 +90,15 @@ public class PanicARFragment extends PARFragment {
         parsingInstances = new ParsingInstances();
         pilihanForm = new ArrayList<>();
         databaseHandler = new DatabaseHandler(getActivity());
-        pilihForm();
+
+        if(!getActivity().getIntent().getStringExtra("path_form").equals("")){
+            //dari atur stiker activity
+            setAr(getActivity().getIntent().getStringExtra("path_form"),getActivity().getIntent().getStringExtra("id_form"));
+        }else{
+            //dari landing page
+            pilihForm();
+        }
+
 
     }
 
@@ -92,37 +109,66 @@ public class PanicARFragment extends PARFragment {
         this.viewLayoutId = R.layout.panicar_view;
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        //radar
+//        radarView = (PARRadarView)view.findViewById(R.id.arRadarView);
+//        caution = (ImageView)view.findViewById(R.id.tombol_caution);
+//        cancel = (ImageView)view.findViewById(R.id.tombol_cancel);
+//        keterangan = (RelativeLayout)view.findViewById(R.id.rl_keterangan_form);
+        bmb = (BoomMenuButton)view.findViewById(R.id.bmb_scan);
+
+//        caution.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                keterangan.setVisibility(View.VISIBLE);
+//                cancel.setVisibility(View.VISIBLE);
+//                caution.setVisibility(View.GONE);
+//            }
+//        });
+//
+//        cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                keterangan.setVisibility(View.GONE);
+//                cancel.setVisibility(View.GONE);
+//                caution.setVisibility(View.VISIBLE);
+//            }
+//        });
 
         //menu pada saat scan
-        bmb = (BoomMenuButton)view.findViewById(R.id.bmb_scan);
+
         assert bmb != null;
         bmb.setButtonEnum(ButtonEnum.TextInsideCircle);
-        bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_1);
-        bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_4_2);
+        bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_5_1);
+        bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_5_4);
 
         //set circle menu
         final TextInsideCircleButton.Builder aturStiker = new TextInsideCircleButton.Builder()
-                .normalImageRes(R.drawable.dolphin)
+                .normalImageRes(R.drawable.horse)
                 .normalText("Atur Stiker")
                 .normalTextColor(Color.WHITE)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
                         aturStiker(getPathForm(),getIdForm());
+                        Intent intent = new Intent(getActivity(),AturStikerActivity.class);
+                        intent.putExtra("path_form",getPathForm());
+                        intent.putExtra("id_form",getIdForm());
+                        startActivity(intent);
+                        getActivity().finish();
                     }
                 });
-        TextInsideCircleButton.Builder hilangkanRadar = new TextInsideCircleButton.Builder()
+        TextInsideCircleButton.Builder bukaPeta = new TextInsideCircleButton.Builder()
                 .normalImageRes(R.drawable.eagle)
-                .normalText("Hilangkan Radar")
+                .normalText("Buka Peta")
                 .normalTextColor(Color.WHITE)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        Toast.makeText(getActivity(), "Radar Hilang", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Buka Peta", Toast.LENGTH_SHORT).show();
                     }
                 });
         TextInsideCircleButton.Builder syncDataServer = new TextInsideCircleButton.Builder()
-                .normalImageRes(R.drawable.elephant)
+                .normalImageRes(R.drawable.dolphin)
                 .normalText("Sync Data Server")
                 .normalTextColor(Color.WHITE)
                 .listener(new OnBMClickListener() {
@@ -132,7 +178,7 @@ public class PanicARFragment extends PARFragment {
                     }
                 });
         TextInsideCircleButton.Builder gantiKuesioner = new TextInsideCircleButton.Builder()
-                .normalImageRes(R.drawable.horse)
+                .normalImageRes(R.drawable.elephant)
                 .normalText("Pilih Kuesioner")
                 .normalTextColor(Color.WHITE)
                 .listener(new OnBMClickListener() {
@@ -141,14 +187,41 @@ public class PanicARFragment extends PARFragment {
                         pilihForm();
                     }
                 });
-        bmb.addBuilder(aturStiker);
-        bmb.addBuilder(hilangkanRadar);
-        bmb.addBuilder(syncDataServer);
-        bmb.addBuilder(gantiKuesioner);
+        TextInsideCircleButton.Builder detailKuesioner = new TextInsideCircleButton.Builder()
+                .normalImageRes(R.drawable.horse)
+                .normalText("Detail Kuesioner")
+                .normalTextColor(Color.WHITE)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        CustomModalDetailForm customModalDetailForm= new CustomModalDetailForm(getActivity(),"","");
+                        customModalDetailForm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        customModalDetailForm.show();
+                    }
+                });
+
+
+
+            bmb.addBuilder(aturStiker);
+            bmb.addBuilder(bukaPeta);
+            bmb.addBuilder(syncDataServer);
+            bmb.addBuilder(gantiKuesioner);
+            bmb.addBuilder(detailKuesioner);
 
 
         getRadarView().setRadarRange(500);
+//
         return view;
+    }
+
+    public void hilangkanRadar(){
+        radarView.setVisibility(View.GONE);
+        muncul = 0;
+    }
+
+    public void munculkanRadar(){
+        radarView.setVisibility(View.VISIBLE);
+        muncul = 1;
     }
 
     @Override
@@ -209,7 +282,7 @@ public class PanicARFragment extends PARFragment {
             @Override
             public void onClick(View v) {
                 Log.d("aji_bangunan_sensus_67",bangunansensus.get(3));
-                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(3));
+                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(1));
                 customModalScan.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 customModalScan.show();
 
@@ -253,15 +326,15 @@ public class PanicARFragment extends PARFragment {
     private void createCDPOIs(){
 
         double degreeCorrection = 0.1;    // approx 7700 meter
-        //double degreeCorrection = 0.01; // approx 1000 meter
-        //double degreeCorrection = 0.001; // approx 121 meter
-        //double degreeCorrection = 0.0001; // approx 12 meter
+//        double degreeCorrection = 0.01; // approx 1000 meter
+//        double degreeCorrection = 0.001; // approx 121 meter
+//        double degreeCorrection = 0.0001; // approx 12 meter
         Location currentLocation = PSKDeviceAttitude.sharedDeviceAttitude().getLocation();
 
-//        PARController.getInstance().addPoi(createPoi("North", "", currentLocation.getLatitude()+degreeCorrection, currentLocation.getLongitude(),""));
-//        PARController.getInstance().addPoi(createPoi("South", "", currentLocation.getLatitude()-degreeCorrection, currentLocation.getLongitude(),""));
-//        PARController.getInstance().addPoi(createPoi("West", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()-degreeCorrection,""));
-//        PARController.getInstance().addPoi(createPoi("East", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()+degreeCorrection,""));
+        PARController.getInstance().addPoi(createPoi("Utara", "", currentLocation.getLatitude()+degreeCorrection, currentLocation.getLongitude(),0.0));
+        PARController.getInstance().addPoi(createPoi("Selatan", "", currentLocation.getLatitude()-degreeCorrection, currentLocation.getLongitude(),0.0));
+        PARController.getInstance().addPoi(createPoi("Barat", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()-degreeCorrection,0.0));
+        PARController.getInstance().addPoi(createPoi("Timur", "",  currentLocation.getLatitude(),                  currentLocation.getLongitude()+degreeCorrection,0.0));
     }
 
     public void pilihForm(){
@@ -286,7 +359,6 @@ public class PanicARFragment extends PARFragment {
                         setPathForm(def);
                         setIdForm(def);
                         Log.d("wulan_d",getPathForm()+" "+getIdForm());
-//                        setAr(getPathForm(),getIdForm());
                         cekStiker(getPathForm(),getIdForm());
                     }
                 })
@@ -297,6 +369,7 @@ public class PanicARFragment extends PARFragment {
                     }
                 }).create();
         dialog.show();
+        dialog.setCancelable(false);
     }
 
     public void setPathForm(int def){
@@ -319,7 +392,6 @@ public class PanicARFragment extends PARFragment {
         if(databaseHandler.getAll(idForm).isEmpty()){
             Log.d("wulan_d_2","sini");
             aturStiker(pathForm,idForm);
-            setAr(pathForm,idForm);
         }else{
             setAr(pathForm,idForm);
         }
@@ -371,10 +443,15 @@ public class PanicARFragment extends PARFragment {
     }
 
     public void aturStiker(String pathForm, String idForm){
-        aturStikerDialog = new AturStikerDialog(getActivity(),pathForm,idForm);
-        aturStikerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        aturStikerDialog.show();
+
+//        aturStikerDialog = new AturStikerDialog(getActivity(),pathForm,idForm);
+//        aturStikerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        aturStikerDialog.show();
 //        setAr(pathForm,idForm);
+        Intent intent = new Intent(getActivity(),AturStikerActivity.class);
+        intent.putExtra("path_form",getPathForm());
+        intent.putExtra("id_form",getIdForm());
+        startActivity(intent);
     }
 
 }

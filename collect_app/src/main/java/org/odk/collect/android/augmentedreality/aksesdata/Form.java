@@ -8,6 +8,16 @@ public class Form {
     private String pathForm;
     private String idForm;
     private String displayName;
+    private String totalIsian;
+
+    public Form(){
+
+    }
+
+    public Form(String displayName,String totalIsian){
+        this.displayName = displayName;
+        this.totalIsian = totalIsian;
+    }
 
     public String getPathForm() {
         return pathForm;
@@ -31,5 +41,13 @@ public class Form {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getTotalIsian() {
+        return totalIsian;
+    }
+
+    public void setTotalIsian(String totalIsian) {
+        this.totalIsian = totalIsian;
     }
 }
