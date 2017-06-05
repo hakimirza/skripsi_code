@@ -26,6 +26,8 @@ public class CustomModalFotoBs extends Dialog{
     private ImageView fotoBangunan;
     private ImageLoader imageLoader;
     private String pathFoto;
+
+
     CustomModalFotoBs(Activity activity,String pathFoto){
         super(activity);
         this.activity = activity;
@@ -49,5 +51,7 @@ public class CustomModalFotoBs extends Dialog{
             fotoBangunan.setImageBitmap(bitmap);
         }
     }
+
+
 
 }

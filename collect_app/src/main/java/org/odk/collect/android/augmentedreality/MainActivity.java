@@ -27,11 +27,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ListFormForDownload;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.augmentedreality.aksesdata.AksesDataOdk;
-import org.odk.collect.android.augmentedreality.aksesdata.ParsingForm;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.augmentedreality.formisian.SetLocationActivity;
 import org.odk.collect.android.augmentedreality.scan.ARPortraitActivity;
-import org.odk.collect.android.augmentedreality.scan.AturStikerDialog;
+import org.odk.collect.android.augmentedreality.scan.CustomModalAturStiker;
 import org.odk.collect.android.augmentedreality.ui.MainMenuApp;
 import org.odk.collect.android.downloadinstance.Download;
 import org.odk.collect.android.downloadinstance.DownloadInstances;
@@ -56,7 +54,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
     private String pathForm;
     String idForm;
     private HashMap<String,String> keyForStriker;
-    AturStikerDialog aturStikerDialog;
+    CustomModalAturStiker aturStikerDialog;
 
 
     @Override
@@ -125,7 +123,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
 //                intent = new Intent(this, ParsingForm.class);
 //                startActivity(intent);
 //            }
-//            aturStikerDialog.setDialogResult(new AturStikerDialog.OnMyDialogResult() {
+//            aturStikerDialog.setDialogResult(new CustomModalAturStiker.OnMyDialogResult() {
 //                @Override
 //                public void finish(HashMap hasmap) {
 //                    Toast.makeText(MainActivity.this, "tooooo", Toast.LENGTH_SHORT).show();
@@ -246,7 +244,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Downl
                         setPathForm(def);
                         setIdForm(def);
                         idForm = getIdForm();
-                        aturStikerDialog = new AturStikerDialog(MainActivity.this,getPathForm(),getIdForm());
+                        aturStikerDialog = new CustomModalAturStiker(MainActivity.this,getPathForm(),getIdForm());
                         aturStikerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         aturStikerDialog.show();
 

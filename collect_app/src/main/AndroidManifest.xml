@@ -287,6 +287,9 @@ the specific language governing permissions and limitations under the License.
 
         <activity android:name=".augmentedreality.scan.AturStikerActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".augmentedreality.jajal.JajalActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+
 
         <service
             android:name=".augmentedreality.formisian.FetchAddressIntentService"

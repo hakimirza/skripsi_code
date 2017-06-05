@@ -26,7 +26,6 @@ import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.augmentedreality.MainActivity;
 import org.odk.collect.android.augmentedreality.aksesdata.AksesDataOdk;
 import org.odk.collect.android.augmentedreality.aksesdata.Instances;
 import org.odk.collect.android.augmentedreality.aksesdata.ParsingForm;
@@ -41,10 +40,8 @@ import org.odk.collect.android.augmentedreality.arkit.PARRadarView;
 import org.odk.collect.android.augmentedreality.arkit.StikerLabel;
 import org.odk.collect.android.augmentedreality.sensorkit.PSKDeviceAttitude;
 import org.odk.collect.android.augmentedreality.sensorkit.enums.PSKDeviceOrientation;
-import org.odk.collect.android.augmentedreality.ui.BuilderManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -68,7 +65,7 @@ public class PanicARFragment extends PARFragment {
     ArrayList<String> pilihanForm ;
     private String pathForm;
     private String idForm;
-    AturStikerDialog aturStikerDialog;
+    CustomModalAturStiker aturStikerDialog;
     BoomMenuButton bmb;
 
     PARRadarView radarView;
@@ -91,16 +88,17 @@ public class PanicARFragment extends PARFragment {
         pilihanForm = new ArrayList<>();
         databaseHandler = new DatabaseHandler(getActivity());
 
-        if(!getActivity().getIntent().getStringExtra("path_form").equals("")){
-            //dari atur stiker activity
-            setAr(getActivity().getIntent().getStringExtra("path_form"),getActivity().getIntent().getStringExtra("id_form"));
-        }else{
-            //dari landing page
-            pilihForm();
-        }
-
-
+        pilihForm();
+//        if(!getActivity().getIntent().getStringExtra("path_form").equals("")){
+//            //dari atur stiker activity
+//            setAr(getActivity().getIntent().getStringExtra("path_form"),getActivity().getIntent().getStringExtra("id_form"));
+//        }else{
+//            //dari landing page
+//            pilihForm();
+//        }
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -150,11 +148,11 @@ public class PanicARFragment extends PARFragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         aturStiker(getPathForm(),getIdForm());
-                        Intent intent = new Intent(getActivity(),AturStikerActivity.class);
-                        intent.putExtra("path_form",getPathForm());
-                        intent.putExtra("id_form",getIdForm());
-                        startActivity(intent);
-                        getActivity().finish();
+//                        Intent intent = new Intent(getActivity(),AturStikerActivity.class);
+//                        intent.putExtra("path_form",getPathForm());
+//                        intent.putExtra("id_form",getIdForm());
+//                        startActivity(intent);
+//                        getActivity().finish();
                     }
                 });
         TextInsideCircleButton.Builder bukaPeta = new TextInsideCircleButton.Builder()
@@ -255,7 +253,7 @@ public class PanicARFragment extends PARFragment {
 
 
 
-//                Intent intent = new Intent(getActivity(),AturStikerDialog.class);
+//                Intent intent = new Intent(getActivity(),CustomModalAturStiker.class);
 //                intent.putExtra("path_form",getPathForm());
 //                startActivity(intent);
 
@@ -397,61 +395,58 @@ public class PanicARFragment extends PARFragment {
         }
     }
     public void setAr(String pathForm,String idForm){
-//        Log.d("wulan_d_1",databaseHandler.getAll(idForm).toString());
-//        if(databaseHandler.getAll(idForm).isEmpty()){
-//            Log.d("wulan_d_2","sini");
-//            aturStiker(pathForm,idForm);
-//        }else{
-//            Log.d("wulan_d_3","sini");
-            ArrayList<String> key = databaseHandler.getAll(idForm);
-            ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
-            getInstancesByIdForm = aksesDataOdk.getKeteranganInstancesbyIdForm(idForm);
-            key.add("foto_bangunan");
-            key.add("location");
-            Log.d("cinta",key.toString());
-            for (Instances instances : getInstancesByIdForm){
-                try{
-                    bangunanArrayList.add(parsingInstances.getValueHasMap(instances.getPathInstances(),key));
-                    Log.d("cinta_size",""+bangunanArrayList.size());
-                }catch (Exception e){
+        PARController.getInstance().clearObjects();
+        ArrayList<String> key = databaseHandler.getAll(idForm);
+        ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
+        getInstancesByIdForm = aksesDataOdk.getKeteranganInstancesbyIdForm(idForm);
+        key.add("foto_bangunan");
+        key.add("location");
+        Log.d("cinta",key.toString());
+        for (Instances instances : getInstancesByIdForm){
+            try{
+                bangunanArrayList.add(parsingInstances.getValueHasMap(instances.getPathInstances(),key));
+                Log.d("cinta_size",""+bangunanArrayList.size());
+            }catch (Exception e){
 
-                }
             }
-            for (Bangunan bangunan : bangunanArrayList){
-                Log.d("Cinta",bangunan.getHashMap().toString());
-                ArrayList<String> parameter = new ArrayList<>();
-                Location location = new Location("location");
-                location.setLatitude(bangunan.getLat());
-                location.setLongitude(bangunan.getLon());
+        }
+        for (Bangunan bangunan : bangunanArrayList){
+            Log.d("Cinta",bangunan.getHashMap().toString());
+            ArrayList<String> parameter = new ArrayList<>();
+            Location location = new Location("location");
+            location.setLatitude(bangunan.getLat());
+            location.setLongitude(bangunan.getLon());
 
-                parameter.add(bangunan.getPathFoto());
-                parameter.add(bangunan.getJarak());
+            parameter.add(bangunan.getPathFoto());
+            parameter.add(bangunan.getJarak());
 
-                parameter.add(bangunan.getHashMap().get(key.get(0)));
-                parameter.add(bangunan.getHashMap().get(key.get(1)));
-                parameter.add(bangunan.getHashMap().get(key.get(2)));
+            parameter.add(bangunan.getHashMap().get(key.get(0)));
+            parameter.add(bangunan.getHashMap().get(key.get(1)));
+            parameter.add(bangunan.getHashMap().get(key.get(2)));
 
-//            for (int i=0; i<bangunan.getKeteranganBangunan().size();i++){
-//                parameter.add(bangunan.getKeteranganBangunan().get(i));
-//            }
-                Log.d("wulan_8",parameter.toString());
+            Log.d("wulan_8",parameter.toString());
 
-                PARController.getInstance().addPoi( createStiker(parameter,location,key));
-            }
-//        }
+            PARController.getInstance().addPoi( createStiker(parameter,location,key));
+        }
 
     }
 
     public void aturStiker(String pathForm, String idForm){
 
-//        aturStikerDialog = new AturStikerDialog(getActivity(),pathForm,idForm);
-//        aturStikerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        aturStikerDialog.show();
-//        setAr(pathForm,idForm);
-        Intent intent = new Intent(getActivity(),AturStikerActivity.class);
-        intent.putExtra("path_form",getPathForm());
-        intent.putExtra("id_form",getIdForm());
-        startActivity(intent);
+        aturStikerDialog = new CustomModalAturStiker(getActivity(),pathForm,idForm);
+        aturStikerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        aturStikerDialog.show();
+        aturStikerDialog.setDialog(new CustomModalAturStiker.OnMyDialogAturStikerResult() {
+            @Override
+            public void finish(String pathForm, String idForm) {
+                Log.d("wulan_wulan","path :"+pathForm+","+"id :"+idForm);
+                setAr(pathForm,idForm);
+            }
+        });
+//        Intent intent = new Intent(getActivity(),AturStikerActivity.class);
+//        intent.putExtra("path_form",getPathForm());
+//        intent.putExtra("id_form",getIdForm());
+//        startActivity(intent);
     }
 
 }

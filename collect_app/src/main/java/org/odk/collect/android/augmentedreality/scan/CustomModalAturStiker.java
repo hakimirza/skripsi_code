@@ -17,6 +17,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.augmentedreality.DatabaseHandler;
 import org.odk.collect.android.augmentedreality.aksesdata.ParsingForm;
 import org.odk.collect.android.augmentedreality.arkit.PARController;
+import org.odk.collect.android.augmentedreality.jajal.CustomDoalog;
 import org.odk.collect.android.augmentedreality.tooltipWindow.TooltipWindow;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.w3c.dom.Text;
@@ -28,7 +29,7 @@ import java.util.HashMap;
  * Created by Septiawan Aji Pradan on 6/2/2017.
  */
 
-public class AturStikerDialog extends Dialog{
+public class CustomModalAturStiker extends Dialog{
 
     private Activity activity;
     private String pathForm;
@@ -50,7 +51,9 @@ public class AturStikerDialog extends Dialog{
 
     DatabaseHandler db;
 
-   public AturStikerDialog(Activity activity,String pathForm,String idForm){
+    OnMyDialogAturStikerResult onMyDialogAturStikerResult;
+
+   public CustomModalAturStiker(Activity activity, String pathForm, String idForm){
         super(activity);
         this.activity = activity;
         this.pathForm = pathForm;
@@ -96,9 +99,10 @@ public class AturStikerDialog extends Dialog{
                     Toast.makeText(activity, "Ada yang belum di isi", Toast.LENGTH_SHORT).show();
                 }else{
                     db.insertTabel(idForm,getHasMap().get(TEXTVIEW_ATAS),getHasMap().get(TEXTVIEW_1),getHasMap().get(TEXTVIEW_2),getHasMap().get(TEXTVIEW_3));
-//                    PanicARFragment pf = new PanicARFragment();
-//                    pf.setAr(pathForm,idForm);
-                    dismiss();
+                    if(onMyDialogAturStikerResult != null) {
+                        onMyDialogAturStikerResult.finish(pathForm, idForm);
+                        CustomModalAturStiker.this.dismiss();
+                    }
                 }
 
             }
@@ -184,4 +188,13 @@ public class AturStikerDialog extends Dialog{
     public HashMap<String,String> getHasMap(){
         return keyForParse;
     }
+
+    public void setDialog(CustomModalAturStiker.OnMyDialogAturStikerResult dialogResult){
+        onMyDialogAturStikerResult = dialogResult;
+    };
+
+    public interface OnMyDialogAturStikerResult{
+        void finish(String pathForm,String idForm);
+    }
+
 }
