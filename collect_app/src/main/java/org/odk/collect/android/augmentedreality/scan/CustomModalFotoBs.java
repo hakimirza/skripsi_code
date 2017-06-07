@@ -41,7 +41,6 @@ public class CustomModalFotoBs extends Dialog{
         setContentView(R.layout.detail_foto_bs_modal);
         Toast.makeText(activity, pathFoto, Toast.LENGTH_SHORT).show();
         imageLoader = VolleySingletonImage.getInstance(activity).getImageLoader();
-        ketBangunanSesus = (TextView)findViewById(R.id.ket_bangunan_sensus);
         fotoBangunan = (ImageView)findViewById(R.id.gambar_bangunan_sensus);
         BitmapFactory.Options options = new BitmapFactory.Options();
         Log.d("aji_custom_22",pathFoto);

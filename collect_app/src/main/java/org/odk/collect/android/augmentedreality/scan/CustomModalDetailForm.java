@@ -35,8 +35,6 @@ public class CustomModalDetailForm extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_detail_kuesioner);
-        namaFormTv = (TextView)findViewById(R.id.nama_kuesioner);
-        totalIsianTv = (TextView)findViewById(R.id.total_isian);
     }
 
 }

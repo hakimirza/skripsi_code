@@ -13,6 +13,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class MainMenuApp extends AppCompatActivity {
     private LisfFormAdapter lisfFormAdapter;
     private ArrayList<Form> forms;
     private RecyclerView recyclerView;
+    private ExpandGridView gridView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,10 @@ public class MainMenuApp extends AppCompatActivity {
         bmb.setButtonEnum(ButtonEnum.Ham);
         bmb.setPiecePlaceEnum((PiecePlaceEnum.HAM_2));
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
+
+        gridView = (ExpandGridView) findViewById(R.id.grid_view);
+        gridView.setExpanded(true);
+        gridView.setAdapter(new ImageAdapter(this));
 
         setData();
         HamButton.Builder builder1 = new HamButton.Builder()

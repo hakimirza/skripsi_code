@@ -2,7 +2,6 @@ package org.odk.collect.android.augmentedreality.scan;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
@@ -148,11 +147,6 @@ public class PanicARFragment extends PARFragment {
                     @Override
                     public void onBoomButtonClick(int index) {
                         aturStiker(getPathForm(),getIdForm());
-//                        Intent intent = new Intent(getActivity(),AturStikerActivity.class);
-//                        intent.putExtra("path_form",getPathForm());
-//                        intent.putExtra("id_form",getIdForm());
-//                        startActivity(intent);
-//                        getActivity().finish();
                     }
                 });
         TextInsideCircleButton.Builder bukaPeta = new TextInsideCircleButton.Builder()
@@ -280,7 +274,7 @@ public class PanicARFragment extends PARFragment {
             @Override
             public void onClick(View v) {
                 Log.d("aji_bangunan_sensus_67",bangunansensus.get(3));
-                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(1));
+                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(0));
                 customModalScan.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 customModalScan.show();
 
@@ -423,6 +417,7 @@ public class PanicARFragment extends PARFragment {
             parameter.add(bangunan.getHashMap().get(key.get(0)));
             parameter.add(bangunan.getHashMap().get(key.get(1)));
             parameter.add(bangunan.getHashMap().get(key.get(2)));
+            parameter.add(bangunan.getHashMap().get(key.get(3)));
 
             Log.d("wulan_8",parameter.toString());
 

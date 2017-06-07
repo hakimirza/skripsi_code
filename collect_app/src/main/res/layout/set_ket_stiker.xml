@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/white"
-    >
+    android:background="@color/white_transparent">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,12 +11,16 @@
         android:text="Atur Keterangan Stiker"
         android:id="@+id/tv_atur_ket_stiker"
         android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
         android:textSize="16sp"/>
     <RelativeLayout
-        android:layout_width="300dp"
+        android:layout_width="370dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_below="@id/tv_atur_ket_stiker"
         android:id="@+id/relativeLayout">
         <RelativeLayout
@@ -58,7 +61,8 @@
                 android:orientation="horizontal"
                 android:layout_marginTop=".75dp">
                 <RelativeLayout
-                    android:layout_width="70dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.25"
                     android:layout_height="match_parent"
                     android:background="@color/black_transparent"
                     android:layout_marginLeft="0.75dp"
@@ -89,7 +93,8 @@
                         android:textSize="15dp" />
                 </RelativeLayout>
                 <RelativeLayout
-                    android:layout_width="70dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.25"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="0.75dp"
                     android:layout_marginRight="0.75dp"
@@ -120,7 +125,8 @@
                         android:textSize="15dp" />
                 </RelativeLayout>
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.25"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="0.75dp"
                     android:layout_marginRight="0.75dp"
@@ -150,6 +156,40 @@
                         android:textSize="15dp"
                         android:id="@+id/tv_kolom_3"/>
                 </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.25"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="0.75dp"
+                    android:layout_marginRight="0.75dp"
+                    android:background="#80FF4F4F"
+                    android:id="@+id/rl_kolom_4">
+                    <TextView
+                        android:id="@+id/kolom_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center"
+                        android:text="Jarak"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="12dp"
+                        android:layout_marginTop="1.5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/kolom_4"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="100m"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="15dp"
+                        android:id="@+id/tv_kolom_4"/>
+                </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -159,6 +199,7 @@
         android:layout_below="@id/relativeLayout"
         android:id="@+id/rl_simpan_form"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/ico_rounded">
         <TextView
             android:layout_width="wrap_content"

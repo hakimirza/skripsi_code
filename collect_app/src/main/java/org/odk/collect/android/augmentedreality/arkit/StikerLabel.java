@@ -27,11 +27,12 @@ import java.util.ArrayList;
  */
 
 public class StikerLabel extends PARPoi {
-    private TextView slsTv;
-    private TextView fisikTv;
-    private TextView sensusTv;
+    private TextView atasTv;
+    private TextView kolom1Tv;
+    private TextView kolom2Tv;
+    private TextView kolom3Tv;
     private TextView jarakTv;
-    private TextView judulKolom1,judulKolom2;
+    private TextView judulKolom1,judulKolom2,judulKolom3;
     private ImageView fotoBangunan;
     private int layoutId;
     private ArrayList<String> keterangan;
@@ -113,20 +114,25 @@ public class StikerLabel extends PARPoi {
 
 
 
-        this.slsTv = (TextView)this._labelView.findViewById(R.id.tv_ket_sls);
-        this.fisikTv = (TextView)this._labelView.findViewById(R.id.tv_fisik);
-        this.sensusTv = (TextView)this._labelView.findViewById(R.id.tv_sensus);
+        this.atasTv= (TextView)this._labelView.findViewById(R.id.tv_atas_scan);
+        this.kolom1Tv= (TextView)this._labelView.findViewById(R.id.tv_kolom_1_scan);
+        this.kolom2Tv = (TextView)this._labelView.findViewById(R.id.tv_kolom_2_scan);
+        this.kolom3Tv = (TextView)this._labelView.findViewById(R.id.tv_kolom_3_scan);
         this.jarakTv = (TextView)this._labelView.findViewById(R.id.tv_jarak);
+
         this.judulKolom1 = (TextView)this._labelView.findViewById(R.id.judul_kolom_1);
         this.judulKolom2 = (TextView)this._labelView.findViewById(R.id.judul_kolom_2);
+        this.judulKolom3 = (TextView)this._labelView.findViewById(R.id.judul_kolom_3);
         this.fotoBangunan = (ImageView)this._labelView.findViewById(R.id.foto_bangunan);
 
-        slsTv.setText(keterangan.get(2));
-        fisikTv.setText(keterangan.get(3));
-        sensusTv.setText(keterangan.get(4));
+        atasTv.setText(keterangan.get(2));
+        kolom1Tv.setText(keterangan.get(3));
+        kolom2Tv.setText(keterangan.get(4));
+        kolom3Tv.setText(keterangan.get(5));
 
         judulKolom1.setText(key.get(1));
         judulKolom2.setText(key.get(2));
+        judulKolom3.setText(key.get(3));
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;

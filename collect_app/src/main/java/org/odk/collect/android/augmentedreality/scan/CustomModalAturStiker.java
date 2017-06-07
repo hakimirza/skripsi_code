@@ -40,16 +40,17 @@ public class CustomModalAturStiker extends Dialog{
     public static final String TEXTVIEW_1 = "textview_1";
     public static final String TEXTVIEW_2 = "textview_2";
     public static final String TEXTVIEW_3 = "textview_3";
-    private RelativeLayout rl_1,rl_2,rl_3,rl_ket_sls;
-    private TextView tv_1,tv_2,tv_3,tv_atas;
-    TooltipWindow tooltipWindow;
+    public static final String TEXTVIEW_4 = "textview_4";
+    private RelativeLayout rl_1,rl_2,rl_3,rl_4,rl_ket_sls;
+    private TextView tv_1,tv_2,tv_3,tv_4,tv_atas;
     private ParsingForm parsingForm;
     int def;
 
-    ArrayList<String> kec;
-    String pilihan;
+    private ArrayList<String> kec;
+    private ArrayList<String> keyPertama = new ArrayList<>();
+    private String pilihan;
 
-    DatabaseHandler db;
+    private DatabaseHandler db;
 
     OnMyDialogAturStikerResult onMyDialogAturStikerResult;
 
@@ -65,6 +66,7 @@ public class CustomModalAturStiker extends Dialog{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.set_ket_stiker);
         declaration();
+        setData();
 
         rl_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +86,12 @@ public class CustomModalAturStiker extends Dialog{
                 pilihanVariabel(v,tv_3,TEXTVIEW_3);
             }
         });
+        rl_4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(activity, "Untuk Jarak", Toast.LENGTH_SHORT).show();
+            }
+        });
         rl_ket_sls.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,55 +106,61 @@ public class CustomModalAturStiker extends Dialog{
                 if(getHasMap().size()!=4){
                     Toast.makeText(activity, "Ada yang belum di isi", Toast.LENGTH_SHORT).show();
                 }else{
-                    db.insertTabel(idForm,getHasMap().get(TEXTVIEW_ATAS),getHasMap().get(TEXTVIEW_1),getHasMap().get(TEXTVIEW_2),getHasMap().get(TEXTVIEW_3));
+                    db.insertTabel(idForm,getHasMap().get(TEXTVIEW_ATAS),getHasMap().get(TEXTVIEW_1),getHasMap().get(TEXTVIEW_2),getHasMap().get(TEXTVIEW_3),getHasMap().get(TEXTVIEW_4));
                     if(onMyDialogAturStikerResult != null) {
                         onMyDialogAturStikerResult.finish(pathForm, idForm);
                         CustomModalAturStiker.this.dismiss();
                     }
                 }
-
             }
         });
+
+        getKeyForm();
     }
 
     public void declaration(){
         rl_1 = (RelativeLayout)findViewById(R.id.rl_kolom_1);
         rl_2 = (RelativeLayout)findViewById(R.id.rl_kolom_2);
         rl_3 = (RelativeLayout)findViewById(R.id.rl_kolom_3);
+        rl_4 = (RelativeLayout)findViewById(R.id.rl_kolom_4);
         rl_ket_sls = (RelativeLayout)findViewById(R.id.rl_ket_sls);
         tv_1 = (TextView)findViewById(R.id.kolom_1);
         tv_2 = (TextView)findViewById(R.id.kolom_2);
         tv_3 = (TextView)findViewById(R.id.kolom_3);
+        tv_4 = (TextView)findViewById(R.id.kolom_4);
         tv_atas = (TextView)findViewById(R.id.tv_atas);
         saveHas = (RelativeLayout) findViewById(R.id.rl_simpan_form);
 
-        tooltipWindow = new TooltipWindow(activity);
         parsingForm = new ParsingForm();
         kec = new ArrayList<>();
         keyForParse = new HashMap<>();
         db = new DatabaseHandler(activity.getApplicationContext());
     }
 
-    public ArrayList<String> getKeyForm (){
-        Log.d("wulan_path",pathForm);
-        ArrayList<String> keyForm  = new ArrayList<>();
-        keyForm = parsingForm.getVariabelForm(pathForm);
-        Log.d("wulan_key",keyForm.toString());
-        return keyForm;
+    public void setData(){
+        ArrayList<String> variabelnya = db.getAll(idForm);
+        if(!variabelnya.isEmpty()){
+            tv_atas.setText(variabelnya.get(0));
+            tv_1.setText(variabelnya.get(1));
+            tv_2.setText(variabelnya.get(2));
+            tv_3.setText(variabelnya.get(3));
+        }
     }
 
-    public void pilihanVariabel(final View v,final TextView tv,final String key){
-        ArrayList<String> var = new ArrayList<>();
-
-        for(int i=0;i<getKeyForm().size();i++){
-            if(!getKeyForm().get(i).equals("foto_bangunan") && !getKeyForm().get(i).equals("location")){
-                var.add(getKeyForm().get(i));
+    public void getKeyForm (){
+        for(int i=0;i<parsingForm.getVariabelForm(pathForm).size();i++){
+            if(!parsingForm.getVariabelForm(pathForm).get(i).equals(ParsingForm.LOKASI) && !parsingForm.getVariabelForm(pathForm).get(i).equals(ParsingForm.FOTO_BANGUNAN)){
+                keyPertama.add(parsingForm.getVariabelForm(pathForm).get(i));
             }
         }
+        Log.d("wulan_key",keyPertama.toString());
+    }
 
-        final String[] variabel = new String[var.size()];
-        for (int i=0;i<var.size();i++) {
-            variabel[i] = var.get(i);
+
+    public void pilihanVariabel(final View v,final TextView tv,final String key){
+        final String[] variabel = new String[keyPertama.size()];
+        for (int i=0;i<keyPertama.size();i++) {
+            variabel[i] = keyPertama.get(i);
         }
 
             def = 0;
@@ -161,15 +175,11 @@ public class CustomModalAturStiker extends Dialog{
                     .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-//                            if(!tooltipWindow.isTooltipShown()) {
-//                                tooltipWindow.showToolTip(v);
-//                            }else{
-//                                tooltipWindow.dismissTooltip();
-//                            }
+
                             pilihan = variabel[def];
+                            keyPertama.remove(def);
                             tv.setText(pilihan);
                             setHasmap(key,pilihan);
-
                         }
                     })
                     .setNegativeButton("Batal", new DialogInterface.OnClickListener() {

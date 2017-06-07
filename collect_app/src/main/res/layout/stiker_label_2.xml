@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:singleLine="true"
                 android:textColor="@color/white"
-                android:id="@+id/tv_ket_sls"
+                android:id="@+id/tv_atas_scan"
                 android:gravity="center"/>
         </RelativeLayout>
         <LinearLayout
@@ -40,7 +40,8 @@
             android:orientation="horizontal"
             android:layout_marginTop=".75dp">
             <RelativeLayout
-                android:layout_width="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
                 android:layout_height="match_parent"
                 android:background="@color/black_transparent"
                 android:layout_marginLeft="0.75dp"
@@ -53,6 +54,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="8dp"
                     android:layout_marginTop="1.5dp"/>
@@ -64,12 +66,13 @@
                     android:layout_centerVertical="true"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:id="@+id/tv_fisik"
+                    android:id="@+id/tv_kolom_1_scan"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_width="50dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="0.75dp"
                 android:layout_marginRight="0.75dp"
@@ -82,6 +85,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:textSize="8dp"
                     android:textColor="@color/white"
                     android:layout_marginTop="1.5dp"/>
@@ -92,19 +96,51 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:id="@+id/tv_sensus"
+                    android:id="@+id/tv_kolom_2_scan"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="0.75dp"
                 android:layout_marginRight="0.75dp"
                 android:background="@color/black_transparent">
                 <TextView
-                    android:id="@+id/judul_jr"
+                    android:id="@+id/judul_kolom_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:textSize="8dp"
+                    android:layout_marginTop="1.5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/judul_kolom_3"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:id="@+id/tv_kolom_3_scan"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="0.75dp"
+                android:layout_marginRight="0.75dp"
+                android:background="#80FF4F4F"
+                android:id="@+id/rl_kolom_4">
+                <TextView
+                    android:id="@+id/kolom_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -112,18 +148,21 @@
                     android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:text="Jarak"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
                     android:textSize="8dp"
                     android:layout_marginTop="1.5dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_below="@id/judul_jr"
+                    android:layout_below="@id/kolom_4"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
+                    android:text="100m"
                     android:singleLine="true"
                     android:textColor="@color/white"
-                    android:textSize="15dp"
+                    android:textSize="10dp"
                     android:id="@+id/tv_jarak"/>
             </RelativeLayout>
 

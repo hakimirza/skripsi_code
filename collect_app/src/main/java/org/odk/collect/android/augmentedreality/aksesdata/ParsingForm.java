@@ -17,6 +17,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 
 public class ParsingForm {
+
+    public static final String LOKASI = "location";
+    public static final String FOTO_BANGUNAN = "foto_bangunan";
     private ArrayList<String> arrayVariabel = new ArrayList();
 
     public ArrayList<String> getVariabelForm (String dir){
