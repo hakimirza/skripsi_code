@@ -1,19 +1,25 @@
 package org.odk.collect.android.augmentedreality.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.location.Location;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -26,7 +32,13 @@ import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.augmentedreality.Bangunan;
+import org.odk.collect.android.augmentedreality.DatabaseHandler;
+import org.odk.collect.android.augmentedreality.aksesdata.AksesDataOdk;
 import org.odk.collect.android.augmentedreality.aksesdata.Form;
+import org.odk.collect.android.augmentedreality.aksesdata.Instances;
+import org.odk.collect.android.augmentedreality.aksesdata.ParsingInstances;
+import org.odk.collect.android.augmentedreality.arkit.PARController;
 import org.odk.collect.android.augmentedreality.scan.ARActivity;
 import org.odk.collect.android.augmentedreality.scan.ARPortraitActivity;
 
@@ -36,19 +48,27 @@ import java.util.ArrayList;
  * Created by Septiawan Aji Pradan on 6/3/2017.
  */
 
-public class MainMenuApp extends AppCompatActivity {
+public class MainMenuApp extends AppCompatActivity implements View.OnClickListener {
     private BoomMenuButton bmb;
     private ArrayList<Pair> piecesAndButtons = new ArrayList<>();
     private LisfFormAdapter lisfFormAdapter;
     private ArrayList<Form> forms;
     private RecyclerView recyclerView;
     private ExpandGridView gridView;
+    private ImageView sortImage;
+    private AksesDataOdk aksesDataOdk;
+    private int def;
+    private DatabaseHandler databaseHandler;
+    private ParsingInstances parsingInstances;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_skripsi);
 
         forms = new ArrayList<>();
+        aksesDataOdk = new AksesDataOdk();
+        databaseHandler = new DatabaseHandler(getApplicationContext());
+        parsingInstances = new ParsingInstances();
 
 //        recyclerView = (RecyclerView)findViewById(R.id.list_form_main);
         bmb = (BoomMenuButton) findViewById(R.id.bmb);
@@ -56,12 +76,13 @@ public class MainMenuApp extends AppCompatActivity {
         bmb.setButtonEnum(ButtonEnum.Ham);
         bmb.setPiecePlaceEnum((PiecePlaceEnum.HAM_2));
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
+        sortImage = (ImageView)findViewById(R.id.sort_foto);
 
         gridView = (ExpandGridView) findViewById(R.id.grid_view);
         gridView.setExpanded(true);
-        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setFocusable(false);
+        gridView.setAdapter(new ImageAdapter(this,setDataAwal()));
 
-        setData();
         HamButton.Builder builder1 = new HamButton.Builder()
                 .normalImageRes(R.drawable.ic_camera)
                 .normalText("Scan Bangunan")
@@ -89,29 +110,102 @@ public class MainMenuApp extends AppCompatActivity {
         bmb.addBuilder(builder1);
         bmb.addBuilder(builder2);
 
-    }
-
-    public void setData(){
-        Form form = new Form("Susenas","14");
-        forms.add(form);
-
-        form = new Form("Sakernas 2016","23");
-        forms.add(form);
-
-        form = new Form("SDKI 2017","39");
-        forms.add(form);
-
-        form = new Form("Sensus Penduduk","20");
-        forms.add(form);
-
-        form = new Form("Sensus Ekonomi","15");
-        forms.add(form);
-
-//        formLayout();
+        sortImage.setOnClickListener(this);
 
     }
 
-//    public void formLayout(){
+    public ArrayList<String> setDataAwal(){
+        ArrayList<String> pathFotos = new ArrayList<>();
+        for(int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
+            ArrayList<Instances> getInstancesByIdForm = new ArrayList<>();
+            ArrayList<String> key = databaseHandler.getAll(aksesDataOdk.getKeteranganForm().get(i).getIdForm());
+            ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
+            getInstancesByIdForm = aksesDataOdk.getKeteranganInstancesbyIdForm(aksesDataOdk.getKeteranganForm().get(i).getIdForm());
+            key.add("foto_bangunan");
+            key.add("location");
+            Log.d("cinta",key.toString());
+            for (Instances instances : getInstancesByIdForm){
+                try{
+                    bangunanArrayList.add(parsingInstances.getValueHasMap(instances.getPathInstances(),key));
+                    Log.d("cinta_size",""+bangunanArrayList.size());
+                }catch (Exception e){
+
+                }
+            }
+            for (Bangunan bangunan : bangunanArrayList){
+                pathFotos.add(bangunan.getPathFoto());
+            }
+        }
+
+        Log.d("wulan_07",pathFotos.toString());
+        return pathFotos;
+    }
+
+    public ArrayList<String> setDatabyIdForm(String formId){
+        ArrayList<String> pathFotos = new ArrayList<>();
+        ArrayList<Instances> getInstancesByIdForm = new ArrayList<>();
+        ArrayList<String> key = databaseHandler.getAll(formId);
+        ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
+        getInstancesByIdForm = aksesDataOdk.getKeteranganInstancesbyIdForm(formId);
+        key.add("foto_bangunan");
+        key.add("location");
+        Log.d("cinta",key.toString());
+        for (Instances instances : getInstancesByIdForm){
+            try{
+                bangunanArrayList.add(parsingInstances.getValueHasMap(instances.getPathInstances(),key));
+                Log.d("cinta_size",""+bangunanArrayList.size());
+            }catch (Exception e){
+
+            }
+        }
+        for (Bangunan bangunan : bangunanArrayList){
+            pathFotos.add(bangunan.getPathFoto());
+        }
+
+        return pathFotos;
+    }
+
+    public void pilihForm(){
+        String[] pilihan = new String[aksesDataOdk.getKeteranganForm().size()];
+        for (int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
+            pilihan[i] = aksesDataOdk.getKeteranganForm().get(i).getDisplayName();
+        }
+
+        def = 0;
+
+        AlertDialog dialog = new AlertDialog.Builder(MainMenuApp.this)
+                .setTitle("Pilih Kuesioner")
+                .setSingleChoiceItems(pilihan, 0,  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        def = which;
+                    }
+                })
+                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String formId = aksesDataOdk.getKeteranganForm().get(def).getIdForm();
+                        gridView.setAdapter(new ImageAdapter(MainMenuApp.this,setDatabyIdForm(formId)));
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        dialog.show();
+        dialog.setCancelable(false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v==sortImage){
+            pilihForm();
+        }
+    }
+
+    //    public void formLayout(){
 //        lisfFormAdapter = new LisfFormAdapter(forms);
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 //        recyclerView.setLayoutManager(layoutManager);

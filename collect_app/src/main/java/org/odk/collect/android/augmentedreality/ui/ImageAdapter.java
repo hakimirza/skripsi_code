@@ -1,6 +1,8 @@
 package org.odk.collect.android.augmentedreality.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,28 +12,32 @@ import android.widget.ImageView;
 
 import org.odk.collect.android.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by Septiawan Aji Pradan on 6/7/2017.
  */
 
 public class ImageAdapter extends BaseAdapter {
     private Context context;
+    private ArrayList<String> pathFotos;
 
-    public Integer[] gambar = {
-            R.drawable.img_rumah,
-            R.drawable.img_ar,
-            R.drawable.ic_input_data,
-            R.drawable.img_rumah,
-            R.drawable.img_rumah
-    };
+//    public Integer[] gambar = {
+//            R.drawable.img_rumah,
+//            R.drawable.img_ar,
+//            R.drawable.ic_input_data,
+//            R.drawable.img_rumah,
+//            R.drawable.img_rumah
+//    };
 
-    public ImageAdapter(Context context){
+    public ImageAdapter(Context context, ArrayList<String> pathFotos){
         this.context = context;
+        this.pathFotos = pathFotos;
     }
 
     @Override
     public int getCount() {
-        return gambar.length;
+        return pathFotos.size();
     }
 
     @Override
@@ -55,8 +61,12 @@ public class ImageAdapter extends BaseAdapter {
             grid = (View) convertView;
         }
 
+
         ImageView imageView = (ImageView)grid.findViewById(R.id.foto_bangunan_hal_utama);
-        imageView.setImageResource(gambar[position]);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        final Bitmap bitmap = BitmapFactory.decodeFile(pathFotos.get(position), options);
+        imageView.setImageBitmap(bitmap);
 
         return grid;
     }

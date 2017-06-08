@@ -127,7 +127,7 @@ abstract class AppListFragment extends ListFragment {
 
         menu
                 .add(0, MENU_SORT, 0, R.string.sort_the_list)
-                .setIcon(R.drawable.ic_sort)
+                .setIcon(R.drawable.ic_sort_main)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         menu

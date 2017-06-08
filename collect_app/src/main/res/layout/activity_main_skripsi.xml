@@ -4,15 +4,15 @@
     android:id="@+id/activity_ham_button"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".augmentedreality.ui.MainMenuApp">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,9 +21,36 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_marginTop="5dp">-->
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="0.5">-->
+                    <!--<ImageView-->
+                        <!--android:layout_width="40dp"-->
+                        <!--android:layout_height="40dp"-->
+                        <!--android:src="@drawable/ic_photo_camera"/>-->
+                <!--</RelativeLayout>-->
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="0.5">-->
+                    <!--<ImageView-->
+                        <!--android:layout_width="40dp"-->
+                        <!--android:layout_height="40dp"-->
+                        <!--android:layout_alignParentEnd="true"-->
+                        <!--android:src="@drawable/ic_help_round_button"/>-->
+                <!--</RelativeLayout>-->
+            <!--</LinearLayout>-->
+
+
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="130dp"
-                android:layout_height="130dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@drawable/foto_profil"
                 android:id="@+id/foto_profil"
                 android:layout_gravity="center_horizontal"
@@ -35,31 +62,70 @@
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp"
+                android:textSize="15sp"
+                android:textColor="@color/abu_main"
                 android:id="@+id/nama_profil"
                 android:layout_below="@id/foto_profil"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="40dp"/>
+                android:layout_height="30dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/view_main"
+                android:layout_marginBottom="2dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/view_main"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.9"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/abu_main"
+                    android:text="F O T O   B A N G U N A N"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/sort_foto"
+                        android:src="@drawable/ic_sort_main"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/view_main"
+                android:layout_marginBottom="2dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/view_main"
+                android:layout_marginBottom="5dp"/>
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Daftar Kuesioner"/>-->
-            <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/list_form_main"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:layout_below="@id/nama_profil"></android.support.v7.widget.RecyclerView>-->
+
             <org.odk.collect.android.augmentedreality.ui.ExpandGridView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/grid_view"
                 android:numColumns="auto_fit"
-                android:gravity="center"
                 android:nestedScrollingEnabled="true"
-                android:layout_margin="3dp"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:horizontalSpacing="3dp"
                 android:verticalSpacing="3dp"></org.odk.collect.android.augmentedreality.ui.ExpandGridView>
         </LinearLayout>

@@ -31,4 +31,7 @@ the License.
     <color name="white_transparent">#80FFFFFF</color>\
     <color name="jarak_transparent">#80ffbf4f</color>
 
+    <color name="abu_main">#808080</color>
+    <color name="view_main">#8c8c8c</color>
+
 </resources>
