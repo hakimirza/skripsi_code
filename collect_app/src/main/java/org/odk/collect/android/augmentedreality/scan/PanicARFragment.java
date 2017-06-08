@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -265,7 +266,7 @@ public class PanicARFragment extends PARFragment {
     }
 
 
-    public StikerLabel createStiker(final ArrayList<String> bangunansensus, Location location,ArrayList<String> key){
+    public StikerLabel createStiker(final ArrayList<String> bangunansensus, Location location, ArrayList<String> key, final Uri uri){
         Log.d("aji_bangunan_sensus",bangunansensus.get(3));
         final StikerLabel stiker = new StikerLabel(key,location,bangunansensus,R.layout.stiker_label_2,R.drawable.ic_dot_blue);
 
@@ -274,7 +275,7 @@ public class PanicARFragment extends PARFragment {
             @Override
             public void onClick(View v) {
                 Log.d("aji_bangunan_sensus_67",bangunansensus.get(3));
-                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(0));
+                CustomModalFotoBs customModalScan = new CustomModalFotoBs(getActivity(),bangunansensus.get(0),uri);
                 customModalScan.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 customModalScan.show();
 
@@ -392,6 +393,7 @@ public class PanicARFragment extends PARFragment {
         PARController.getInstance().clearObjects();
         ArrayList<String> key = databaseHandler.getAll(idForm);
         ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
+        ArrayList<Uri> uris = new ArrayList<>();
         getInstancesByIdForm = aksesDataOdk.getKeteranganInstancesbyIdForm(idForm);
         key.add("foto_bangunan");
         key.add("location");
@@ -399,29 +401,30 @@ public class PanicARFragment extends PARFragment {
         for (Instances instances : getInstancesByIdForm){
             try{
                 bangunanArrayList.add(parsingInstances.getValueHasMap(instances.getPathInstances(),key));
+                uris.add(instances.getUri());
                 Log.d("cinta_size",""+bangunanArrayList.size());
             }catch (Exception e){
 
             }
         }
-        for (Bangunan bangunan : bangunanArrayList){
-            Log.d("Cinta",bangunan.getHashMap().toString());
+        for (int i=0;i<bangunanArrayList.size();i++){
+            Log.d("Cinta",bangunanArrayList.get(i).getHashMap().toString());
             ArrayList<String> parameter = new ArrayList<>();
             Location location = new Location("location");
-            location.setLatitude(bangunan.getLat());
-            location.setLongitude(bangunan.getLon());
+            location.setLatitude(bangunanArrayList.get(i).getLat());
+            location.setLongitude(bangunanArrayList.get(i).getLon());
 
-            parameter.add(bangunan.getPathFoto());
-            parameter.add(bangunan.getJarak());
+            parameter.add(bangunanArrayList.get(i).getPathFoto());
+            parameter.add(bangunanArrayList.get(i).getJarak());
 
-            parameter.add(bangunan.getHashMap().get(key.get(0)));
-            parameter.add(bangunan.getHashMap().get(key.get(1)));
-            parameter.add(bangunan.getHashMap().get(key.get(2)));
-            parameter.add(bangunan.getHashMap().get(key.get(3)));
+            parameter.add(bangunanArrayList.get(i).getHashMap().get(key.get(0)));
+            parameter.add(bangunanArrayList.get(i).getHashMap().get(key.get(1)));
+            parameter.add(bangunanArrayList.get(i).getHashMap().get(key.get(2)));
+            parameter.add(bangunanArrayList.get(i).getHashMap().get(key.get(3)));
 
             Log.d("wulan_8",parameter.toString());
 
-            PARController.getInstance().addPoi( createStiker(parameter,location,key));
+            PARController.getInstance().addPoi( createStiker(parameter,location,key,uris.get(i)));
         }
 
     }

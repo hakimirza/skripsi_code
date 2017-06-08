@@ -1,5 +1,7 @@
 package org.odk.collect.android.augmentedreality.aksesdata;
 
+import android.net.Uri;
+
 /**
  * Created by Septiawan Aji Pradan on 5/28/2017.
  */
@@ -9,6 +11,7 @@ public class Instances {
     private String pathFoto;
     private String pathInstances;
     private String formId;
+    private Uri uri;
 
     public String getUuid() {
         return uuid;
@@ -40,5 +43,14 @@ public class Instances {
 
     public void setFormId(String formId) {
         this.formId = formId;
+    }
+
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
     }
 }

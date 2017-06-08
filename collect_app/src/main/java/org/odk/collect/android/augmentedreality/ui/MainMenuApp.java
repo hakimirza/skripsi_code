@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -60,6 +61,7 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
     private int def;
     private DatabaseHandler databaseHandler;
     private ParsingInstances parsingInstances;
+    private ArrayList<Uri> urisGlobal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +83,7 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
         gridView = (ExpandGridView) findViewById(R.id.grid_view);
         gridView.setExpanded(true);
         gridView.setFocusable(false);
-        gridView.setAdapter(new ImageAdapter(this,setDataAwal()));
+        gridView.setAdapter(new ImageAdapter(getApplicationContext(),setDataAwal(),MainMenuApp.this,urisGlobal));
 
         HamButton.Builder builder1 = new HamButton.Builder()
                 .normalImageRes(R.drawable.ic_camera)
@@ -116,6 +118,7 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
 
     public ArrayList<String> setDataAwal(){
         ArrayList<String> pathFotos = new ArrayList<>();
+        ArrayList<Uri> uris = new ArrayList<>();
         for(int i=0;i<aksesDataOdk.getKeteranganForm().size();i++){
             ArrayList<Instances> getInstancesByIdForm = new ArrayList<>();
             ArrayList<String> key = databaseHandler.getAll(aksesDataOdk.getKeteranganForm().get(i).getIdForm());
@@ -127,7 +130,8 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
             for (Instances instances : getInstancesByIdForm){
                 try{
                     bangunanArrayList.add(parsingInstances.getValueHasMap(instances.getPathInstances(),key));
-                    Log.d("cinta_size",""+bangunanArrayList.size());
+                    uris.add(instances.getUri());
+                    Log.d("cinta_size",""+instances.getUri().toString());
                 }catch (Exception e){
 
                 }
@@ -137,8 +141,15 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
             }
         }
 
+        getUri(uris);
+
         Log.d("wulan_07",pathFotos.toString());
         return pathFotos;
+    }
+
+    public ArrayList<Uri> getUri(ArrayList<Uri> uris){
+        urisGlobal = uris;
+        return urisGlobal;
     }
 
     public ArrayList<String> setDatabyIdForm(String formId){
@@ -174,7 +185,7 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
         def = 0;
 
         AlertDialog dialog = new AlertDialog.Builder(MainMenuApp.this)
-                .setTitle("Pilih Kuesioner")
+                .setTitle("Tampilkan foto berdasarkan kuesioner")
                 .setSingleChoiceItems(pilihan, 0,  new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -185,7 +196,7 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String formId = aksesDataOdk.getKeteranganForm().get(def).getIdForm();
-                        gridView.setAdapter(new ImageAdapter(MainMenuApp.this,setDatabyIdForm(formId)));
+                        gridView.setAdapter(new ImageAdapter(getApplicationContext(),setDatabyIdForm(formId),MainMenuApp.this,urisGlobal));
                     }
                 })
                 .setNegativeButton("Batal", new DialogInterface.OnClickListener() {

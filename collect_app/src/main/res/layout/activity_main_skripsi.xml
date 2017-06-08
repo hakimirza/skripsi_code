@@ -20,7 +20,8 @@
             android:orientation="vertical"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:background="#f1f1f1">
             <!--<LinearLayout-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="50dp"-->
@@ -29,43 +30,51 @@
                 <!--<RelativeLayout-->
                     <!--android:layout_width="0dp"-->
                     <!--android:layout_height="match_parent"-->
-                    <!--android:layout_weight="0.5">-->
+                    <!--android:layout_weight="0.5"-->
+                    <!--android:layout_marginLeft="7dp">-->
                     <!--<ImageView-->
-                        <!--android:layout_width="40dp"-->
-                        <!--android:layout_height="40dp"-->
+                        <!--android:layout_width="30dp"-->
+                        <!--android:layout_height="30dp"-->
                         <!--android:src="@drawable/ic_photo_camera"/>-->
                 <!--</RelativeLayout>-->
                 <!--<RelativeLayout-->
                     <!--android:layout_width="0dp"-->
                     <!--android:layout_height="match_parent"-->
-                    <!--android:layout_weight="0.5">-->
+                    <!--android:layout_weight="0.5"-->
+                    <!--android:layout_marginRight="7dp">-->
                     <!--<ImageView-->
-                        <!--android:layout_width="40dp"-->
-                        <!--android:layout_height="40dp"-->
+                        <!--android:layout_width="30dp"-->
+                        <!--android:layout_height="30dp"-->
                         <!--android:layout_alignParentEnd="true"-->
                         <!--android:src="@drawable/ic_help_round_button"/>-->
                 <!--</RelativeLayout>-->
             <!--</LinearLayout>-->
 
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/foto_profil"
-                android:id="@+id/foto_profil"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"/>
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Septiawan Aji Pradana"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:textSize="15sp"
-                android:textColor="@color/abu_main"
-                android:id="@+id/nama_profil"
-                android:layout_below="@id/foto_profil"/>
+                android:orientation="vertical">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/foto_profil"
+                    android:id="@+id/foto_profil"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Septiawan Aji Pradana"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/abu_main"
+                    android:id="@+id/nama_profil"
+                    android:layout_below="@id/foto_profil"/>
+
+            </LinearLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="30dp"/>
@@ -79,10 +88,12 @@
                 android:layout_height="1dp"
                 android:background="@color/view_main"
                 />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="#f1f1f1">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -91,17 +102,26 @@
                     android:gravity="center"
                     android:textStyle="bold"
                     android:textSize="20dp"
-                    android:textColor="@color/abu_main"
+                    android:textColor="@drawable/black"
                     android:text="F O T O   B A N G U N A N"/>
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.1">
+                    android:layout_weight="0.1"
+                    android:layout_marginRight="7dp">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:id="@+id/sort_foto"
                         android:src="@drawable/ic_sort_main"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"/>
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/sort_foto_merah"
+                        android:src="@drawable/ic_sort_main_merah"
+                        android:visibility="gone"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"/>
                 </RelativeLayout>

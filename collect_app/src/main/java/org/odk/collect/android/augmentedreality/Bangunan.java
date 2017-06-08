@@ -1,5 +1,7 @@
 package org.odk.collect.android.augmentedreality;
 
+import android.net.Uri;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,7 +17,7 @@ public class Bangunan {
     private String jarak;
     private ArrayList<String> keteranganBangunan;
     private HashMap<String,String> hashMap;
-
+    private Uri uri;
     public Bangunan(){
 
     }
@@ -81,5 +83,13 @@ public class Bangunan {
 
     public void setHashMap(HashMap<String, String> hashMap) {
         this.hashMap = hashMap;
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
     }
 }
