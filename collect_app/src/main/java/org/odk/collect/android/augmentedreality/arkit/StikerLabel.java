@@ -46,12 +46,14 @@ public class StikerLabel extends PARPoi {
     protected static final DecimalFormat FORMATTER_DISTANCE_LARGEST = new DecimalFormat("#### km");
     protected static final DecimalFormat FORMATTER_DISTANCE_LARGE = new DecimalFormat("###,## km");
     protected static final DecimalFormat FORMATTER_DISTANCE_SMALL = new DecimalFormat("### m");
+    private float jarak;
+
 
     public StikerLabel(){
 
     }
 
-    public StikerLabel(ArrayList<String> key,Location location, ArrayList<String> keterangan, int layoutId, int radarResourceId){
+    public StikerLabel(ArrayList<String> key,Location location, ArrayList<String> keterangan, int layoutId, int radarResourceId,float jarak){
         super(location);
         Log.d("cinta_stiker_ket",keterangan.toString());
         this.keterangan = keterangan;
@@ -59,6 +61,7 @@ public class StikerLabel extends PARPoi {
         this.radarResourceId = radarResourceId;
         this.offset.set(0,0);
         this.key  = key;
+        this.jarak = jarak;
     }
 
     public StikerLabel(Location location){
@@ -151,28 +154,35 @@ public class StikerLabel extends PARPoi {
         }
         double distance = this.distanceToUser;
 
-        if (distance >= 10000.0) {
-            if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 1000.0) {
-                return;
-            }
-            distance = Math.floor(distance / 1000.0);
-            this.keterangan.set(1,FORMATTER_DISTANCE_LARGEST.format(distance));
-        } else if (distance > 1000.0) {
-            if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 100.0) {
-                return;
-            }
-            distance = Math.floor(distance / 1000.0);
-            this.keterangan.set(1,FORMATTER_DISTANCE_LARGE.format(distance));
-        } else {
-            if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 10.0) {
-                return;
-            }
-            distance = Math.floor(distance / 5.0) * 5.0;
-            this.keterangan.set(1,FORMATTER_DISTANCE_SMALL.format(distance));;
+        Log.d("wulan_jarak",""+jarak);
+        Log.d("wulan_distance",""+distance);
+        if(distance > jarak){
+            Log.d("wulan_hilang","kesini");
+            this._labelView.setVisibility(View.INVISIBLE);
         }
-        if (this.jarakTv != null) {
-            this.jarakTv.setText((CharSequence)(this.keterangan.get(1)));
-        }
+
+            if (distance >= 10000.0) {
+                if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 1000.0) {
+                    return;
+                }
+                distance = Math.floor(distance / 1000.0);
+                this.keterangan.set(1,FORMATTER_DISTANCE_LARGEST.format(distance));
+            } else if (distance > 1000.0) {
+                if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 100.0) {
+                    return;
+                }
+                distance = Math.floor(distance / 1000.0);
+                this.keterangan.set(1,FORMATTER_DISTANCE_LARGE.format(distance));
+            } else {
+                if (Math.abs(distance - (double)this._lastUpdateAtDistance) < 10.0) {
+                    return;
+                }
+                distance = Math.floor(distance / 5.0) * 5.0;
+                this.keterangan.set(1,FORMATTER_DISTANCE_SMALL.format(distance));;
+            }
+            if (this.jarakTv != null) {
+                this.jarakTv.setText((CharSequence)(this.keterangan.get(1)));
+            }
         this._lastUpdateAtDistance = (float)this.distanceToUser;
     }
 

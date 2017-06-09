@@ -488,7 +488,7 @@ public class MainMenuActivity extends Activity implements DownloadPcl {
                 }
                 return true;
             case MENU_AR :
-                Intent intent = new Intent(getApplicationContext(),MainMenuApp.class);
+                Intent intent = new Intent(getApplicationContext(),LandingPageActivity.class);
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

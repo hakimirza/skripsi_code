@@ -65,7 +65,8 @@ public class PanicARFragment extends PARFragment {
     ArrayList<String> pilihanForm ;
     private String pathForm;
     private String idForm;
-    CustomModalAturStiker aturStikerDialog;
+    private CustomModalAturStiker aturStikerDialog;
+    private CustomModalAturJarak aturJarakDialog;
     BoomMenuButton bmb;
 
     PARRadarView radarView;
@@ -160,14 +161,14 @@ public class PanicARFragment extends PARFragment {
                         Toast.makeText(getActivity(), "Buka Peta", Toast.LENGTH_SHORT).show();
                     }
                 });
-        TextInsideCircleButton.Builder syncDataServer = new TextInsideCircleButton.Builder()
+        final TextInsideCircleButton.Builder aturJarak = new TextInsideCircleButton.Builder()
                 .normalImageRes(R.drawable.dolphin)
-                .normalText("Sync Data Server")
+                .normalText("Atur Jarak")
                 .normalTextColor(Color.WHITE)
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        Toast.makeText(getActivity(), "Sync Data Server ...", Toast.LENGTH_SHORT).show();
+                        aturJarak();
                     }
                 });
         TextInsideCircleButton.Builder gantiKuesioner = new TextInsideCircleButton.Builder()
@@ -197,7 +198,7 @@ public class PanicARFragment extends PARFragment {
 
             bmb.addBuilder(aturStiker);
             bmb.addBuilder(bukaPeta);
-            bmb.addBuilder(syncDataServer);
+            bmb.addBuilder(aturJarak);
             bmb.addBuilder(gantiKuesioner);
             bmb.addBuilder(detailKuesioner);
 
@@ -266,9 +267,9 @@ public class PanicARFragment extends PARFragment {
     }
 
 
-    public StikerLabel createStiker(final ArrayList<String> bangunansensus, Location location, ArrayList<String> key, final Uri uri){
+    public StikerLabel createStiker(final ArrayList<String> bangunansensus, Location location, ArrayList<String> key, final Uri uri,int jarak){
         Log.d("aji_bangunan_sensus",bangunansensus.get(3));
-        final StikerLabel stiker = new StikerLabel(key,location,bangunansensus,R.layout.stiker_label_2,R.drawable.ic_dot_blue);
+        final StikerLabel stiker = new StikerLabel(key,location,bangunansensus,R.layout.stiker_label_2,R.drawable.ic_dot_blue,jarak);
 
 
         stiker.setOnClickListener(new View.OnClickListener() {
@@ -386,10 +387,10 @@ public class PanicARFragment extends PARFragment {
             Log.d("wulan_d_2","sini");
             aturStiker(pathForm,idForm);
         }else{
-            setAr(pathForm,idForm);
+            setAr(pathForm,idForm,100);
         }
     }
-    public void setAr(String pathForm,String idForm){
+    public void setAr(String pathForm,String idForm,int jarak){
         PARController.getInstance().clearObjects();
         ArrayList<String> key = databaseHandler.getAll(idForm);
         ArrayList<Bangunan> bangunanArrayList = new ArrayList<>();
@@ -424,7 +425,7 @@ public class PanicARFragment extends PARFragment {
 
             Log.d("wulan_8",parameter.toString());
 
-            PARController.getInstance().addPoi( createStiker(parameter,location,key,uris.get(i)));
+            PARController.getInstance().addPoi( createStiker(parameter,location,key,uris.get(i),jarak));
         }
 
     }
@@ -438,13 +439,20 @@ public class PanicARFragment extends PARFragment {
             @Override
             public void finish(String pathForm, String idForm) {
                 Log.d("wulan_wulan","path :"+pathForm+","+"id :"+idForm);
-                setAr(pathForm,idForm);
+                setAr(pathForm,idForm,100);
             }
         });
-//        Intent intent = new Intent(getActivity(),AturStikerActivity.class);
-//        intent.putExtra("path_form",getPathForm());
-//        intent.putExtra("id_form",getIdForm());
-//        startActivity(intent);
     }
 
+    public void aturJarak(){
+        aturJarakDialog = new CustomModalAturJarak(getActivity());
+        aturJarakDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        aturJarakDialog.show();
+        aturJarakDialog.setDialog(new CustomModalAturJarak.OnMyDialogAturJarakResult() {
+            @Override
+            public void finish(int jarak) {
+                setAr(getPathForm(),getIdForm(),jarak);
+            }
+        });
+    }
 }

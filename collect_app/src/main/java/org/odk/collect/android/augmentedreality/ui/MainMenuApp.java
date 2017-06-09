@@ -23,11 +23,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
 import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
@@ -42,6 +44,7 @@ import org.odk.collect.android.augmentedreality.aksesdata.ParsingInstances;
 import org.odk.collect.android.augmentedreality.arkit.PARController;
 import org.odk.collect.android.augmentedreality.scan.ARActivity;
 import org.odk.collect.android.augmentedreality.scan.ARPortraitActivity;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -62,6 +65,8 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
     private DatabaseHandler databaseHandler;
     private ParsingInstances parsingInstances;
     private ArrayList<Uri> urisGlobal;
+    private TextView blmAdaData;
+    private ImageView selectAll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,18 +80,25 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
 //        recyclerView = (RecyclerView)findViewById(R.id.list_form_main);
         bmb = (BoomMenuButton) findViewById(R.id.bmb);
         assert bmb != null;
-        bmb.setButtonEnum(ButtonEnum.Ham);
-        bmb.setPiecePlaceEnum((PiecePlaceEnum.HAM_2));
-        bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_2);
+        bmb.setButtonEnum(ButtonEnum.TextInsideCircle);
+        bmb.setPiecePlaceEnum((PiecePlaceEnum.DOT_3_1));
+        bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_3_1);
         sortImage = (ImageView)findViewById(R.id.sort_foto);
+        blmAdaData = (TextView)findViewById(R.id.blm_ada_data);
+        selectAll = (ImageView)findViewById(R.id.select_all);
 
         gridView = (ExpandGridView) findViewById(R.id.grid_view);
         gridView.setExpanded(true);
         gridView.setFocusable(false);
+
+        if(setDataAwal().size()==0){
+            gridView.setVisibility(View.GONE);
+            blmAdaData.setVisibility(View.VISIBLE);
+        }
         gridView.setAdapter(new ImageAdapter(getApplicationContext(),setDataAwal(),MainMenuApp.this,urisGlobal));
 
-        HamButton.Builder builder1 = new HamButton.Builder()
-                .normalImageRes(R.drawable.ic_camera)
+        TextInsideCircleButton.Builder builder1 = new  TextInsideCircleButton.Builder()
+                .normalImageRes(R.drawable.horse)
                 .normalText("Scan Bangunan")
                 .normalTextColor(Color.WHITE)
                 .listener(new OnBMClickListener() {
@@ -97,9 +109,21 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
                         startActivity(intent);
                     }
                 });
-        HamButton.Builder builder2 = new HamButton.Builder()
-                .normalImageRes(R.drawable.ic_input_data)
+        TextInsideCircleButton.Builder builder2 = new TextInsideCircleButton.Builder()
+                .normalImageRes(R.drawable.dolphin)
                 .normalText("Petunjuk")
+                .normalTextColor(Color.WHITE)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+//                        Intent intent = new Intent(getApplicationContext(), ARPortraitActivity.class);
+//                        startActivity(intent);
+                        Toast.makeText(MainMenuApp.this, "About", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        TextInsideCircleButton.Builder builder3 = new TextInsideCircleButton.Builder()
+                .normalImageRes(R.drawable.elephant)
+                .normalText("Sync Data")
                 .normalTextColor(Color.WHITE)
                 .listener(new OnBMClickListener() {
                     @Override
@@ -111,8 +135,10 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
                 });
         bmb.addBuilder(builder1);
         bmb.addBuilder(builder2);
+        bmb.addBuilder(builder3);
 
         sortImage.setOnClickListener(this);
+        selectAll.setOnClickListener(this);
 
     }
 
@@ -197,6 +223,7 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
                     public void onClick(DialogInterface dialog, int which) {
                         String formId = aksesDataOdk.getKeteranganForm().get(def).getIdForm();
                         gridView.setAdapter(new ImageAdapter(getApplicationContext(),setDatabyIdForm(formId),MainMenuApp.this,urisGlobal));
+                        selectAll.setVisibility(View.VISIBLE);
                     }
                 })
                 .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -213,6 +240,9 @@ public class MainMenuApp extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         if(v==sortImage){
             pilihForm();
+        }else if(v==selectAll){
+            gridView.setAdapter(new ImageAdapter(getApplicationContext(),setDataAwal(),MainMenuApp.this,urisGlobal));
+            selectAll.setVisibility(View.GONE);
         }
     }
 
